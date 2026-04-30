@@ -99,46 +99,61 @@ mkdir -p "$FORGE_BIN_DIR"
 BINARY_URL="https://github.com/Wibx-LABS/forge/releases/latest/download/forge-${PLATFORM}-${BIN_ARCH}"
 echo -e "${BLUE}[3/5]${NC} Baixando o binário executável..."
 
+install_via_npm() {
+    # Detect node binary — handles nvm, brew, system installs
+    NODE_BIN=$(command -v node 2>/dev/null)
+    if [ -z "$NODE_BIN" ]; then
+        NODE_BIN=$(ls "$HOME/.nvm/versions/node/"*/bin/node 2>/dev/null | sort -V | tail -1)
+    fi
+    if [ -z "$NODE_BIN" ]; then
+        NODE_BIN=$(ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -1)
+    fi
+    if [ -z "$NODE_BIN" ]; then
+        echo -e "${RED}Erro: Node.js não encontrado. Instale via https://nodejs.org ou nvm.${NC}"
+        exit 1
+    fi
+
+    NPM_BIN=$(dirname "$NODE_BIN")/npm
+    cd "$FORGE_HOME/tools/forge-cli"
+    "$NPM_BIN" install && "$NPM_BIN" run build
+
+    # Write run.js with the absolute node path (avoids 'env node' failing with nvm)
+    cat > "$FORGE_HOME/tools/forge-cli/bin/run.js" << JSEOF
+#!${NODE_BIN}
+
+const oclif = require('@oclif/core')
+
+oclif.run().then(require('@oclif/core/flush')).catch(require('@oclif/core/handle'))
+JSEOF
+    chmod +x "$FORGE_HOME/tools/forge-cli/bin/run.js"
+
+    # Link to bin
+    rm -f "$FORGE_BIN_DIR/forge"
+    ln -sf "$FORGE_HOME/tools/forge-cli/bin/run.js" "$FORGE_BIN_DIR/forge"
+    chmod +x "$FORGE_BIN_DIR/forge"
+    echo -e "${GREEN}Forge instalado via Node.js (${NODE_BIN}).${NC}"
+}
+
 if ! curl -sL --fail -o "$FORGE_BIN_DIR/forge" "$BINARY_URL"; then
     echo -e "${YELLOW}Aviso: Binário pré-compilado não encontrado.${NC}"
     echo -e "Tentando instalar via NPM (requer Node.js)..."
-    if command -v npm >/dev/null 2>&1; then
-        cd "$FORGE_HOME/tools/forge-cli"
-        npm install && npm run build
-        ln -sf "$FORGE_HOME/tools/forge-cli/bin/run.js" "$FORGE_BIN_DIR/forge"
-        chmod +x "$FORGE_BIN_DIR/forge"
-    else
-        echo -e "${RED}Erro: Binário não encontrado e Node.js não instalado.${NC}"
-        exit 1
-    fi
+    install_via_npm
 else
     chmod +x "$FORGE_BIN_DIR/forge"
     
-    # 3.1 Verify and fix binary execution (Mac-specific)
+    # Verify and fix binary execution (Mac-specific)
     if [ "$PLATFORM" = "macos" ]; then
-        # Try to remove quarantine
         xattr -d com.apple.quarantine "$FORGE_BIN_DIR/forge" 2>/dev/null || true
-        
-        # Test if it runs, if not try to re-sign ad-hoc
         if ! "$FORGE_BIN_DIR/forge" --version >/dev/null 2>&1; then
             echo -e "${YELLOW}Aviso: Ajustando permissões de segurança do macOS...${NC}"
             codesign -s - -f "$FORGE_BIN_DIR/forge" 2>/dev/null || true
         fi
     fi
 
-    # 3.2 Final check and fallback to NPM
+    # Final check — fallback to NPM if binary still doesn't work
     if ! "$FORGE_BIN_DIR/forge" --version >/dev/null 2>&1; then
-        echo -e "${YELLOW}Aviso: Binário pré-compilado incompatível.${NC}"
-        echo -e "Tentando instalar via NPM (requer Node.js)..."
-        if command -v npm >/dev/null 2>&1; then
-            cd "$FORGE_HOME/tools/forge-cli"
-            npm install && npm run build
-            ln -sf "$FORGE_HOME/tools/forge-cli/bin/run.js" "$FORGE_BIN_DIR/forge"
-            chmod +x "$FORGE_BIN_DIR/forge"
-        else
-            echo -e "${RED}Erro: Não foi possível executar o binário e o Node.js não foi encontrado.${NC}"
-            exit 1
-        fi
+        echo -e "${YELLOW}Aviso: Binário pré-compilado incompatível. Usando Node.js...${NC}"
+        install_via_npm
     fi
 fi
 
