@@ -33,6 +33,32 @@ In v2.0, a third problem is solved: **input overhead**. Running multiple project
 
 ---
 
+## 🛠 Installation
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Wibx-LABS/forge/main/install.sh | bash
+```
+
+## 🚀 Quick Start: Ignition Workflow
+
+Forge builds a **Contextual Engine** for your AI agents. 
+
+### 1. Admission
+Run the CLI in your project directory (new or existing):
+```bash
+forge init
+```
+
+### 2. Ignition
+Open your project in **Claude Code**, **Cursor**, or **Antigravity** and paste the **Ignition Prompt**:
+
+> "Initialize Forge mode. Read `.forge/PATIENT.md` for our objective and `.forge/AUTONOMY.md` for our rules. Adopt the persona in `.forge/agents/Architect_HYDRATED.md` and check `.forge/STATE.md` to begin Phase 1."
+
+### 3. Orchestration
+The agent will now follow the **Chain of Thought** defined in its hydrated template, using the **Institutional DNA** and **Vertical Expertise** injected by the Forge engine.
+
+---
+
 ## The Hospital Model
 
 Projects are patients. The attending physician is you.
