@@ -40,7 +40,7 @@ jobs:
         run: |
           cd tools/forge-cli
           npm run build
-          npx pkg . --targets node20-${{ matrix.target }} --output ../../bin/forge-${{ matrix.suffix }}
+          npx pkg . --targets node18-${{ matrix.target }} --output ../../bin/forge-${{ matrix.suffix }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

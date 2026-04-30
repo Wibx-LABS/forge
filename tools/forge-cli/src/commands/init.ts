@@ -11,7 +11,7 @@ import { prompt } from 'enquirer';
 import Table from 'cli-table3';
 
 const pkg = require('../../package.json');
-const FORGE_VERSION: string = pkg.version ?? '3.0.0-dev';
+const FORGE_VERSION: string = pkg.version ?? '3.1.0';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
