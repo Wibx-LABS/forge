@@ -274,6 +274,14 @@ export default class Init extends Command {
       }
     }
 
-    this.log(chalk.green(`\n[SUCCESS] Admission Complete. Forge is online.\n`));
+    this.log('\n' + chalk.green.bold('  🚀 FORGE IGNITION READY'));
+    this.log(chalk.gray('  -----------------------'));
+    this.log(chalk.white('  Copy and paste this into Claude Code / Cursor / Antigravity:\n'));
+    
+    const ignitionPrompt = `Initialize Forge mode for ${answers.name}. Read .forge/PATIENT.md for our ${answers.domain.toUpperCase()} objectives and .forge/AUTONOMY.md for rules. Adopt the persona in .forge/agents/Architect_HYDRATED.md and check .forge/STATE.md to begin Phase 1.`;
+    
+    this.log(chalk.cyan.italic(`  > "${ignitionPrompt}"`));
+    this.log('\n' + chalk.gray('  (Tip: You can change the agent file to @Builder or @Debugger depending on your phase)'));
+    this.log('');
   }
 }
