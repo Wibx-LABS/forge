@@ -113,6 +113,10 @@ if ! curl -sL --fail -o "$FORGE_BIN_DIR/forge" "$BINARY_URL"; then
     fi
 else
     chmod +x "$FORGE_BIN_DIR/forge"
+    # Remove quarantine flag on macOS to prevent "killed" error
+    if [ "$PLATFORM" = "macos" ]; then
+        xattr -d com.apple.quarantine "$FORGE_BIN_DIR/forge" 2>/dev/null || true
+    fi
 fi
 
 # 4. Configuration
