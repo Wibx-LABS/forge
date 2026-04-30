@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 
+const PROJECT_NAME = '{{project-name}}'
+const PROJECT_OBJECTIVE = '{{project-objective}}'
+
 function App() {
   const [ready, setReady] = useState(false)
 
@@ -8,15 +11,15 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="logo-mark">⬡</div>
-        <h1>{{project-name}}</h1>
-        <p className="tagline">{{project-objective}}</p>
+        <h1>{PROJECT_NAME}</h1>
+        <p className="tagline">{PROJECT_OBJECTIVE}</p>
       </header>
 
       <main className="app-main">
         <div className="card">
           <button
             className={`ignition-btn ${ready ? 'active' : ''}`}
-            onClick={() => setReady(r => !r)}
+            onClick={() => setReady((r: boolean) => !r)}
           >
             {ready ? 'ENGINE ONLINE' : 'IGNITE'}
           </button>
