@@ -247,6 +247,45 @@ export default class Init extends Command {
     await sleep(1000);
     forgeSpinner.succeed('Infrastructure solid.');
 
+    // 1. PATIENT.md
+    const patientContent = `# ${answers.name.toUpperCase()} — Admission Record
+
+## 1. Context
+- **Name**: ${answers.name}
+- **Domain**: ${answers.domain.toUpperCase()}
+- **Admission Type**: ${answers.admissionType}
+- **Priority**: ${answers.urgency}
+
+## 2. Objective
+${answers.objective}
+
+## 3. Expertise Injected
+- [x] WiBX Global Branding (Institutional DNA)
+- [x] ${answers.domain.toUpperCase()} Vertical Expertise
+- [x] ${scaffoldType.toUpperCase()} Project Scaffold
+
+## 4. Health Criteria
+- All core features implemented per Blueprint
+- 0 critical security findings
+- Professional WiBX aesthetics maintained
+`;
+    await fs.writeFile(path.join(targetDir, '.forge', 'PATIENT.md'), patientContent, 'utf8');
+
+    // 2. AUTONOMY.md
+    const autonomyContent = `# Engagement Rules: ${answers.autonomy.toUpperCase()}
+
+- **Level**: ${answers.autonomy}
+- **Rules**: 
+  - Agents must strictly follow the hydrated persona templates.
+  - Handoffs occur only when the current phase is [COMPLETED].
+  - Escalations are required for any schema or breaking change.
+`;
+    await fs.writeFile(path.join(targetDir, '.forge', 'AUTONOMY.md'), autonomyContent, 'utf8');
+
+    // 3. STATE.md & HEALTH.md
+    await fs.writeFile(path.join(targetDir, '.forge', 'STATE.md'), `# PROJECT STATE\n\n- [ ] Phase 1: Architecture\n`, 'utf8');
+    await fs.writeFile(path.join(targetDir, '.forge', 'HEALTH.md'), `# PROJECT HEALTH\n\n- Status: Stable\n- Vitals: Green\n`, 'utf8');
+
     let domainContent = 'None';
     if (answers.domain !== 'none') {
       const domainPath = path.join(domainsDir, answers.domain);
