@@ -391,29 +391,38 @@ Run `/forge:resume`. It reads `handoff.json` and restores context. If no handoff
 **Running FORGE 1.0 projects with v2.0?**
 Full backward compatibility. `project_overview.md` is accepted anywhere `PATIENT.md` is expected. `/forge:init` routes to `/forge:admit` internally. `PROJECT.md` is aliased to `PATIENT.md`. No migration required.
 
-**CLI errors: "Cannot find module"?**
-The Forge Engine (v3.0.0) requires dependencies. Navigate to `tools/forge-cli` and run `npm install` followed by `npm run build` to initialize the binary.
+**CLI errors: "Cannot find module" or outdated DNA?**
+The Forge Engine (v3.0.0) is a living library. If you encounter errors or want the latest WiBX expertise, run the maintenance command:
+```bash
+forge update
+```
 
 ---
 
 ## Version History
 
-### v3.0.0 — The CLI Era (Forge Engine)
-
+### v3.1.0 — The Industrial Orchestrator
 _In Development — May 2026_
 
-**Objective:** Transition FORGE from a collection of templates into a standalone, downloadable CLI tool that automates the orchestration of agentic workflows.
+**Objective:** Finalize the cinematic developer experience with zero-config automation and institutional DNA injection.
 
-**Core Pillars:**
-
-- **Forge CLI:** A unified binary for project initialization, state management, and agent orchestration (e.g., `forge init`, `forge start`).
-- **Contextual Hydration:** Automatically hydrate agent templates based on the specific folder/domain they are initialized in, using surgical markdown extraction.
-- **Agent Swarm:** Orchestrate multiple specialized agents (@Architect, @Builder, @Sentinel) with cross-repo awareness.
-- **Skill Injection:** Native support for skill installation in AI assistants (Claude Code, Antigravity) to bridge the gap between framework and execution.
-
-**Inspiration:** Architecture and hydration logic adapted from the [Bifrost Framework](https://github.com/Wibx-LABS/bifrost-framework).
+**Key Features:**
+- **Zero-Config Engine:** Automatic root detection and environment mapping.
+- **Brand Hunter:** Recursive WiBX branding injection (Neon Green/Deep Black).
+- **Vertical Expertise:** Surgical hydration for Fintech, Web3, Content-AI, and Support.
+- **Self-Maintenance:** Integrated version checking and `forge update` command.
 
 ---
+
+### v3.0.0 — The CLI Era (Forge Engine)
+_Released April 2026_
+
+**Objective:** Transition FORGE from a collection of templates into a standalone, downloadable CLI tool.
+
+**Core Pillars:**
+- **Forge CLI:** Unified binary for project initialization (`forge init`).
+- **Contextual Hydration:** Surgical markdown extraction for agent personas.
+- **Agent Swarm:** Orchestration of specialized agents with cross-repo awareness.
 
 ### v2.0.0 — The Hospital Model
 
