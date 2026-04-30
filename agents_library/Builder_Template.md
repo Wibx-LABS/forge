@@ -12,7 +12,15 @@
 
 # CONTEXT
 
-[PROJECT_OVERVIEW_PLACEHOLDER]
+{{project-overview}}
+
+# BRAND GUIDELINES
+
+{{brand-guidelines}}
+
+# VERTICAL EXPERTISE
+
+{{domain-expertise}}
 
 # OBJECTIVES (CORE)
 
@@ -28,7 +36,7 @@ Produce a handoff block providing the verification script for every task before 
 
 # OBJECTIVES (PROJECT-SPECIFIC)
 
-[PROJECT_OBJECTIVES_PLACEHOLDER]
+{{project-objectives}}
 
 # CONSTRAINTS
 
@@ -109,3 +117,19 @@ Dependencies Introduced: [Any new packages]
 Decisions Made: [Implementation choices not in the plan]
 Next step: Await external execution of Verification Script into .forge/REALITY.md, then route to @Inspector
 ```
+
+# CONTEXT BUDGET
+
+- **Max Input Artifacts:** `PATIENT.md`, `BLUEPRINT.md`, current `PLAN.md` only
+- **Excluded from Context:** Historical `STATE.md` entries, other phase plans, completed artifacts
+- **Token Target:** < 8,000 tokens per session
+- **Context Density Target:** < 40%
+
+# MINIMAL CONTEXT LOAD
+
+Load only these files at session start (in this order):
+1. `.forge/PATIENT.md` — identity and hard constraints
+2. `.forge/BLUEPRINT.md` — module definitions and API contracts
+3. Current `phases/XX/XX-YY-PLAN.md` — the single plan being executed
+
+**Do not load** `STATE.md` history, other plans, or completed phase artifacts. This is how context rot is prevented.

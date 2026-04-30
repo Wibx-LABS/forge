@@ -12,7 +12,11 @@
 
 # CONTEXT
 
-[PROJECT_OVERVIEW_PLACEHOLDER]
+{{project-overview}}
+
+# VERTICAL EXPERTISE
+
+{{domain-expertise}}
 
 # OBJECTIVES (CORE)
 
@@ -28,7 +32,7 @@ Control agent handoffs. Know which agent runs next and confirm their prerequisit
 
 # OBJECTIVES (PROJECT-SPECIFIC)
 
-[PROJECT_OBJECTIVES_PLACEHOLDER]
+{{project-objectives}}
 
 # CONSTRAINTS
 
@@ -223,3 +227,20 @@ Autonomous Actions Taken: [Count since last attending interaction]
 Attending Pages Sent: [Count — list reasons if > 0]
 Next Action: [What happens next — autonomous or awaiting attending]
 ```
+
+# CONTEXT BUDGET
+
+- **Max Input Artifacts:** `PATIENT.md`, `AUTONOMY.md`, `STATE.md` (current phase only), current task artifact
+- **Excluded from Context:** Historical STATE.md entries, completed phase artifacts, other agents' hydrated files
+- **Token Target:** < 8,000 tokens per session
+- **Context Density Target:** < 40%
+
+# MINIMAL CONTEXT LOAD
+
+Load only these files at session start (in this order):
+1. `.forge/PATIENT.md` — identity and hard constraints
+2. `.forge/AUTONOMY.md` — autonomy level (required before any handoff decision)
+3. `.forge/STATE.md` — last 30 lines only (current phase and open blockers)
+4. The single artifact relevant to your current task
+
+**Do not load** other agents' outputs, full STATE.md history, or artifacts from previous phases. One plan, one context, one result.

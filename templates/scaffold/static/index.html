@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{project-name}} | WiBX LABS</title>
+    <style>
+        :root {
+            --bg-deep: #0c0c0c;
+            --surface: #141414;
+            --primary: #00ff70; /* Neon Green */
+            --primary-orange: #ff5a00; /* Neon Orange */
+            --foreground: #ebf7ee;
+            --muted: #ababab;
+            --destructive: #f06a6f;
+            --radius: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--foreground);
+            font-family: 'Red Hat Display', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #141414;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 280ms ease;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 112, 0.3);
+        }
+
+        .logo {
+            width: 60px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 64.64 64.64" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#00ff70" d="M33.79,64.64h-2.94C5.62,64.64,0,59.02,0,33.79v-2.94C0,5.62,5.62,0,30.85,0h2.94c25.23,0,30.85,5.62,30.85,30.85v2.94c0,25.23-5.62,30.85-30.85,30.85Z"/>
+            <path fill="#141414" d="M53.16,29.97c1.2-1.6,1.91-3.58,1.91-5.73,0-5.27-4.27-9.54-9.54-9.54-3.97,0-7.37,2.42-8.81,5.87-1.23.92-2.75,1.47-4.4,1.47s-3.18-.55-4.4-1.47c-1.44-3.45-4.84-5.87-8.81-5.87-5.27,0-9.54,4.27-9.54,9.54,0,2.15.71,4.14,1.91,5.73-3.68,3.46-2.65,7.15-2,8.58,0,0,.66,1.26,1.62,2.35,8.39,9.52,20.94,9.04,21.22,9.04h0c.28,0,12.83.48,21.22-9.04.96-1.09,1.62-2.34,1.62-2.35.65-1.43,1.69-5.12-2-8.58ZM45.52,19.1c2.84,0,5.14,2.3,5.14,5.14s-2.3,5.14-5.14,5.14-5.14-2.3-5.14-5.14,2.3-5.14,5.14-5.14ZM19.09,19.1c2.84,0,5.14,2.3,5.14,5.14s-2.3,5.14-5.14,5.14-5.14-2.3-5.14-5.14,2.3-5.14,5.14-5.14ZM50.59,37.86s-.3.33-.3.34c-6.89,7.61-17.62,7.29-17.99,7.29,0,0,0,0,0,0s0,0,0,0c-.37,0-11.1.32-17.99-7.29,0,0-.29-.33-.3-.34-1.25-1.58-1-3.83.64-5.17,1.32.7,2.83,1.09,4.43,1.09,4.79,0,8.75-3.52,9.44-8.12,1.16.5,2.44.78,3.78.78s2.62-.28,3.78-.78c.69,4.6,4.65,8.12,9.44,8.12,1.6,0,3.11-.4,4.43-1.09,1.64,1.34,1.89,3.59.64,5.17Z"/>
+        </svg>
+        <h1>{{project-name}}</h1>
+        <p>{{project-objective}}</p>
+        <button class="btn-primary">Get Started</button>
+    </div>
+</body>
+</html>

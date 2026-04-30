@@ -12,7 +12,11 @@
 
 # CONTEXT
 
-[PROJECT_OVERVIEW_PLACEHOLDER]
+{{project-overview}}
+
+# VERTICAL EXPERTISE
+
+{{domain-expertise}}
 
 # OBJECTIVES (CORE)
 
@@ -26,7 +30,7 @@ Analyse dependencies between plans to enable stage-sequenced execution.
 
 # OBJECTIVES (PROJECT-SPECIFIC)
 
-[PROJECT_OBJECTIVES_PLACEHOLDER]
+{{project-objectives}}
 
 # CONSTRAINTS
 
@@ -147,3 +151,20 @@ Risks: [Plans with highest regression risk]
 Artifacts: phases/XX-phase-name/XX-YY-PLAN.md (for each plan)
 Next Agent: @Conductor → update state, then @Builder via stage sequencing
 ```
+
+# CONTEXT BUDGET
+
+- **Max Input Artifacts:** `PATIENT.md`, `AUTONOMY.md`, `STATE.md` (current phase only), current task artifact
+- **Excluded from Context:** Historical STATE.md entries, completed phase artifacts, other agents' hydrated files
+- **Token Target:** < 8,000 tokens per session
+- **Context Density Target:** < 40%
+
+# MINIMAL CONTEXT LOAD
+
+Load only these files at session start (in this order):
+1. `.forge/PATIENT.md` — identity and hard constraints
+2. `.forge/AUTONOMY.md` — autonomy level (required before any handoff decision)
+3. `.forge/STATE.md` — last 30 lines only (current phase and open blockers)
+4. The single artifact relevant to your current task
+
+**Do not load** other agents' outputs, full STATE.md history, or artifacts from previous phases. One plan, one context, one result.

@@ -13,8 +13,8 @@
 
 Built and maintained by the Wibx Labs team. Internal use only.
 
-**Status:** Running autonomously as of March 2026.
-**Version:** 2.0.0
+**Status:** Running as of March 2026.
+**Version:** 3.0.0 (Dev)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -226,7 +226,10 @@ forge/
 │   ├── status.md                # v2.0 — updated (health-aware)
 │   └── verify.md
 │
-├── domains/                     # Loadable domain configurations
+├── knowledge/                   # Institutional DNA — Master guidelines and standards
+│   └── Brand_Guidelines.md      # Master WiBX design system and brand logic
+│
+├── domains/                     # Vertical Expertise — Project-specific logic and context
 │   └── nexus/
 │       └── domain_config.md
 │
@@ -238,6 +241,29 @@ forge/
 │
 └── README.md
 ```
+
+---
+
+## The Zero-Config Engine (v3.0)
+
+Forge 3.0 is designed for frictionless, industrial-grade onboarding. The CLI is now "self-aware."
+
+### 🏠 Automatic Root Detection
+You no longer need to set `FORGE_HOME`. The CLI automatically traces its own path back to the Forge core, making it truly portable within your environment.
+
+### 🏹 The Brand Hunter
+When you initialize a project, the engine executes a recursive search for the **WiBX DNA** (`Brand_Guidelines.md`). It searches in this order:
+1. **Local Project**: Custom guidelines for the specific patient.
+2. **Knowledge Base**: Master institutional guidelines in `knowledge/`.
+3. **Docs/Parent Folders**: Any intermediate documentation.
+
+This ensures every project is born with the correct WiBX identity (Neon Green accents, Red Hat Display typography, and Premium Dark Mode).
+
+### 🧠 DNA vs. Expertise
+*   **`knowledge/`**: Stores **Institutional DNA**. Things that apply to every project (Brand, Security, Style).
+*   **`domains/`**: Stores **Vertical Expertise**. Things that only matter for specific types of projects (n8n logic, Banking schemas, etc).
+
+---
 
 ### Per-Project Files (`.forge/`)
 
@@ -339,9 +365,29 @@ Run `/forge:resume`. It reads `handoff.json` and restores context. If no handoff
 **Running FORGE 1.0 projects with v2.0?**
 Full backward compatibility. `project_overview.md` is accepted anywhere `PATIENT.md` is expected. `/forge:init` routes to `/forge:admit` internally. `PROJECT.md` is aliased to `PATIENT.md`. No migration required.
 
+**CLI errors: "Cannot find module"?**
+The Forge Engine (v3.0.0) requires dependencies. Navigate to `tools/forge-cli` and run `npm install` followed by `npm run build` to initialize the binary.
+
 ---
 
 ## Version History
+
+### v3.0.0 — The CLI Era (Forge Engine)
+
+_In Development — May 2026_
+
+**Objective:** Transition FORGE from a collection of templates into a standalone, downloadable CLI tool that automates the orchestration of agentic workflows.
+
+**Core Pillars:**
+
+- **Forge CLI:** A unified binary for project initialization, state management, and agent orchestration (e.g., `forge init`, `forge start`).
+- **Contextual Hydration:** Automatically hydrate agent templates based on the specific folder/domain they are initialized in, using surgical markdown extraction.
+- **Agent Swarm:** Orchestrate multiple specialized agents (@Architect, @Builder, @Sentinel) with cross-repo awareness.
+- **Skill Injection:** Native support for skill installation in AI assistants (Claude Code, Antigravity) to bridge the gap between framework and execution.
+
+**Inspiration:** Architecture and hydration logic adapted from the [Bifrost Framework](https://github.com/Wibx-LABS/bifrost-framework).
+
+---
 
 ### v2.0.0 — The Hospital Model
 
@@ -399,4 +445,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 2.0.0
+**Status:** SYSTEM ONLINE | **Version:** 3.0.0 (Dev)

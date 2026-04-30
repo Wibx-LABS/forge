@@ -1,0 +1,55 @@
+{
+  "name": "@forge/cli",
+  "version": "3.0.0-dev",
+  "description": "Forge CLI — Autonomous agent orchestration infrastructure",
+  "keywords": [
+    "forge",
+    "cli",
+    "ai",
+    "agents",
+    "orchestration"
+  ],
+  "homepage": "https://github.com/Wibx-LABS/forge",
+  "license": "Internal",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "forge": "./bin/run.js"
+  },
+  "oclif": {
+    "bin": "forge",
+    "dirname": "forge",
+    "commands": "./dist/commands",
+    "plugins": [],
+    "topicSeparator": ":"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc --watch -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "prepack": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@oclif/core": "^3.27.0",
+    "axios": "^1.6.8",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.5",
+    "enquirer": "^2.4.1",
+    "fs-extra": "^11.2.0",
+    "ora": "^5.4.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ]
+}

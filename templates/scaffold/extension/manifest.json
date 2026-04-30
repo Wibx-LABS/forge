@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "{{project-name}}",
+  "version": "1.0.0",
+  "description": "{{project-objective}}",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "128": "icons/icon128.png"
+  }
+}
