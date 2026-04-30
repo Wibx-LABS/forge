@@ -14,7 +14,7 @@
 Built and maintained by the Wibx Labs team. Internal use only.
 
 **Status:** Operational. Industrial Phase.
-**Version:** 3.1.0 (Stable)
+**Version:** 3.1.3 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -392,7 +392,7 @@ Run `/forge:resume`. It reads `handoff.json` and restores context. If no handoff
 Full backward compatibility. `project_overview.md` is accepted anywhere `PATIENT.md` is expected. `/forge:init` routes to `/forge:admit` internally. `PROJECT.md` is aliased to `PATIENT.md`. No migration required.
 
 **CLI errors: "Cannot find module" or outdated DNA?**
-The Forge Engine (v3.0.0) is a living library. If you encounter errors or want the latest WiBX expertise, run the maintenance command:
+The Forge Engine (v3.1.3) is a living library. If you encounter errors or want the latest WiBX expertise, run the maintenance command:
 ```bash
 forge update
 ```
@@ -401,8 +401,8 @@ forge update
 
 ## Version History
 
-### v3.1.0 — The Industrial Orchestrator
-_In Development — May 2026_
+### v3.1.2 — The Industrial Orchestrator
+_Released May 2026_
 
 **Objective:** Finalize the cinematic developer experience with zero-config automation and institutional DNA injection.
 
@@ -480,4 +480,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 3.0.0 (Dev)
+**Status:** SYSTEM ONLINE | **Version:** 3.1.3 (Stable)
