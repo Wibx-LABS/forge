@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&family=Red+Hat+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --neon: #00ff70;
+  --neon-dim: rgba(0, 255, 112, 0.12);
+  --surface: #0a0a0a;
+  --surface-2: #111111;
+  --surface-3: #1a1a1a;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f0f0f0;
+  --text-muted: #666;
+  --font: 'Red Hat Display', system-ui, sans-serif;
+  --font-mono: 'Red Hat Mono', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
