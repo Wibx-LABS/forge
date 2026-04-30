@@ -13,8 +13,8 @@
 
 Built and maintained by the Wibx Labs team. Internal use only.
 
-**Status:** Running as of March 2026.
-**Version:** 3.0.0 (Dev)
+**Status:** Operational. Industrial Phase.
+**Version:** 3.1.0 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
