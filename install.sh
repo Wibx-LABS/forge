@@ -113,9 +113,32 @@ if ! curl -sL --fail -o "$FORGE_BIN_DIR/forge" "$BINARY_URL"; then
     fi
 else
     chmod +x "$FORGE_BIN_DIR/forge"
-    # Remove quarantine flag on macOS to prevent "killed" error
+    
+    # 3.1 Verify and fix binary execution (Mac-specific)
     if [ "$PLATFORM" = "macos" ]; then
+        # Try to remove quarantine
         xattr -d com.apple.quarantine "$FORGE_BIN_DIR/forge" 2>/dev/null || true
+        
+        # Test if it runs, if not try to re-sign ad-hoc
+        if ! "$FORGE_BIN_DIR/forge" --version >/dev/null 2>&1; then
+            echo -e "${YELLOW}Aviso: Ajustando permissões de segurança do macOS...${NC}"
+            codesign -s - -f "$FORGE_BIN_DIR/forge" 2>/dev/null || true
+        fi
+    fi
+
+    # 3.2 Final check and fallback to NPM
+    if ! "$FORGE_BIN_DIR/forge" --version >/dev/null 2>&1; then
+        echo -e "${YELLOW}Aviso: Binário pré-compilado incompatível.${NC}"
+        echo -e "Tentando instalar via NPM (requer Node.js)..."
+        if command -v npm >/dev/null 2>&1; then
+            cd "$FORGE_HOME/tools/forge-cli"
+            npm install && npm run build
+            ln -sf "$FORGE_HOME/tools/forge-cli/bin/run.js" "$FORGE_BIN_DIR/forge"
+            chmod +x "$FORGE_BIN_DIR/forge"
+        else
+            echo -e "${RED}Erro: Não foi possível executar o binário e o Node.js não foi encontrado.${NC}"
+            exit 1
+        fi
     fi
 fi
 
