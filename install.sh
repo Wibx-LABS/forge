@@ -29,8 +29,30 @@ print_logo() {
     echo ""
 }
 
+# 0. Version Detection
+get_latest_version() {
+    local version=""
+    # Try using git ls-remote if git is installed
+    if command -v git >/dev/null 2>&1; then
+        version=$(git ls-remote --tags --sort='v:refname' https://github.com/Wibx-LABS/forge.git | tail -n1 | sed 's/.*\///')
+    fi
+
+    # Fallback to GitHub API if git fails or version is empty
+    if [ -z "$version" ]; then
+        version=$(curl -s "https://api.github.com/repos/Wibx-LABS/forge/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    fi
+
+    # Final fallback to current known version
+    if [ -z "$version" ]; then
+        version="v3.1.3"
+    fi
+    echo "$version"
+}
+
+FORGE_VERSION=$(get_latest_version)
+
 print_logo
-echo -e "${BOLD}Iniciando a instalação do Forge Engine v3.0.0...${NC}"
+echo -e "${BOLD}Iniciando a instalação do Forge Engine ${FORGE_VERSION}...${NC}"
 echo "------------------------------------------------"
 
 # 1. Environment Detection
