@@ -90,6 +90,7 @@ export default class Init extends Command {
 
     const config = loadConfig();
     const spinner = ora('Initializing Forge core...').start();
+    await checkForUpdates(FORGE_VERSION);
     await sleep(800);
     
     if (!(await fs.pathExists(config.forgePath))) {
