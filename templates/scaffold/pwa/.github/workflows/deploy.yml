@@ -1,0 +1,88 @@
+name: Unified Release Pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  analyze:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      format: ${{ steps.manifest.outputs.format }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Read Forge Manifest
+        id: manifest
+        run: |
+          if [ -f .forge/manifest.json ]; then
+            FORMAT=$(jq -r '.format' .forge/manifest.json)
+            echo "format=$FORMAT" >> $GITHUB_OUTPUT
+          else
+            echo "format=unknown" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-static:
+    needs: analyze
+    if: needs.analyze.outputs.format == 'static' || needs.analyze.outputs.format == 'pwa'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Static Assets
+        run: |
+          if [ -f package.json ]; then
+            npm install && npm run build
+          fi
+          
+      - name: Deploy via Rsync
+        uses: Burnett01/rsync-deployments@7.0.0
+        with:
+          switches: -avzr --delete
+          path: ./dist # Adjust based on project structure
+          remote_path: /var/www/labs/${{ github.event.repository.name }}
+          remote_host: ${{ secrets.LABS_SERVER_IP }}
+          remote_user: ${{ secrets.LABS_SERVER_USER }}
+          remote_key: ${{ secrets.LABS_SSH_KEY }}
+
+  deploy-dynamic:
+    needs: analyze
+    if: needs.analyze.outputs.format == 'vite' || needs.analyze.outputs.format == 'node'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+          
+      - name: Trigger Labs Server Update
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LABS_SERVER_IP }}
+          username: ${{ secrets.LABS_SERVER_USER }}
+          key: ${{ secrets.LABS_SSH_KEY }}
+          script: |
+            docker pull ghcr.io/${{ github.repository }}:latest
+            docker stop ${{ github.event.repository.name }} || true
+            docker rm ${{ github.event.repository.name }} || true
+            docker run -d --name ${{ github.event.repository.name }} \
+              --restart unless-stopped \
+              -p 8080:80 \
+              ghcr.io/${{ github.repository }}:latest

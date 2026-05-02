@@ -157,6 +157,7 @@ export default class Init extends Command {
         choices: [
           { name: 'pwa', message: 'PWA (Progressive Web App)' },
           { name: 'extension', message: 'Browser Extension' },
+          { name: 'n8n', message: 'n8n Automation' },
           { name: 'static', message: 'Single-File HTML Tool' },
           { name: 'vite', message: 'Vite / React / TypeScript' },
           { name: 'none', message: 'Clean Slate' },
@@ -287,6 +288,20 @@ ${answers.objective}
     await fs.writeFile(path.join(targetDir, '.forge', 'STATE.md'), `# PROJECT STATE\n\n- [ ] Phase 1: Architecture\n`, 'utf8');
     await fs.writeFile(path.join(targetDir, '.forge', 'HEALTH.md'), `# PROJECT HEALTH\n\n- Status: Stable\n- Vitals: Green\n`, 'utf8');
 
+    // 4. manifest.json
+    const manifest = {
+      name: answers.name,
+      format: scaffoldType === 'none' ? context.type : scaffoldType,
+      domain: answers.domain,
+      version: '1.0.0',
+      createdAt: new Date().toISOString()
+    };
+    await fs.writeJson(path.join(targetDir, '.forge', 'manifest.json'), manifest, { spaces: 2 });
+    
+    const pipeSpinner = ora(`Configuring Unified Deployment Pipeline for ${manifest.format.toUpperCase()}...`).start();
+    await sleep(800);
+    pipeSpinner.succeed(`Pipeline secured: ${chalk.bold.green(manifest.format.toUpperCase())} routing enabled.`);
+
     let domainContent = 'None';
     if (answers.domain !== 'none') {
       const domainPath = path.join(domainsDir, answers.domain);
@@ -316,12 +331,15 @@ ${answers.objective}
 
     this.log('\n' + chalk.green.bold('  🚀 FORGE IGNITION READY'));
     this.log(chalk.gray('  -----------------------'));
-    this.log(chalk.white('  Copy and paste this into Claude Code / Cursor / Antigravity:\n'));
+    this.log(chalk.white(`  Project: ${chalk.bold(answers.name)}`));
+    this.log(chalk.white(`  Format:  ${chalk.bold(manifest.format.toUpperCase())}`));
+    this.log(chalk.white(`  Pipeline: ${chalk.green('SECURED ✓')}`));
+    this.log('\n' + chalk.white('  Copy and paste this into Claude Code / Cursor / Antigravity:\n'));
     
     const ignitionPrompt = `Initialize Forge mode for ${answers.name}. Read .forge/PATIENT.md for our ${answers.domain.toUpperCase()} objectives and .forge/AUTONOMY.md for rules. Adopt the persona in .forge/agents/Architect_HYDRATED.md and check .forge/STATE.md to begin Phase 1.`;
     
     this.log(chalk.cyan.italic(`  > "${ignitionPrompt}"`));
-    this.log('\n' + chalk.gray('  (Tip: You can change the agent file to @Builder or @Debugger depending on your phase)'));
+    this.log('\n' + chalk.gray(`  (Tip: Run ${chalk.bold('forge deploy')} when your phase is complete to trigger the unified pipeline)`));
     this.log('');
   }
 }

@@ -26,6 +26,21 @@ Do not invoke any other agent. You produce the structure and hand off.
 
 Backward compatibility: if `project_overview.md` is provided instead of `PATIENT.md`, treat it as PATIENT.md and proceed normally. Log the compatibility mode in STATE.md.
 
+# STANDARD TREATMENT PLANS
+
+Use these mappings to determine the care team and scaffold:
+
+- **n8n Automation**:
+  - Care Team: `@FlowBuilder` (Primary), `@QA` (Automation verification).
+  - Scaffold: `templates/scaffold/n8n/`
+  - Domain: `domains/n8n/`
+- **Next.js Web App**:
+  - Care Team: `@Coder` (Lead), `@Designer` (UI/UX), `@QA` (Integration).
+  - Scaffold: `templates/scaffold/nextjs/`
+- **General Scripting**:
+  - Care Team: `@Coder` (Lead), `@QA`.
+  - Scaffold: `templates/scaffold/general/`
+
 # CHAIN OF THOUGHT
 
 ## Step 1 — Intake Validation
@@ -45,6 +60,7 @@ Read `PATIENT.md` and verify these fields are present and non-blank:
 If any field is blank or missing, list the specific gaps and stop. Do not proceed with a partial intake.
 
 Also verify:
+
 - `HEALTH.md` exists and has at least one criterion per group
 - `AUTONOMY.md` exists and has an autonomy level set
 
@@ -85,6 +101,7 @@ project-name/
 Every folder must have a one-line annotation. The `src/` subdirectories should reflect the treatment stack.
 
 If `@FlowBuilder` is on the care team, add:
+
 ```
 ├── workflows/                   # n8n workflow JSON files
 │   ├── [workflow-name].json

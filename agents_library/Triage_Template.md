@@ -51,6 +51,7 @@ Admission is not complete until the attending explicitly confirms PATIENT.md. A 
 ## Step 1 — Codebase Detection
 
 Check if an existing codebase is present:
+
 - If yes: invoke /forge:map immediately. Use the four track outputs (STACK.md, ARCHITECTURE.md, CONVENTIONS.md, CONCERNS.md) to pre-fill Sections 3, 4, and parts of 5 in PATIENT.md.
 - If no: skip to Step 2 with a blank medical history section.
 
@@ -70,9 +71,15 @@ Standard question set (adapt based on what /forge:map already answered):
 
 Skip any question already answered by /forge:map output.
 
+If the project type is **n8n Automation**, add these targeted questions:
+- What are the primary triggers? (Webhook / Schedule / Event)
+- What are the expected input and output data shapes?
+- Are there specific database tables or external APIs that must be integrated?
+
 ## Step 3 — PATIENT.md Draft Production
 
 Using codebase analysis + intake answers, produce a complete PATIENT.md draft:
+
 - Mark every auto-inferred field with [INFERRED]
 - Mark every field requiring confirmation with [CONFIRM]
 - Mark every field the attending must fill with [REQUIRED]
@@ -83,6 +90,7 @@ Present the draft to the attending. Do not proceed until they confirm or correct
 ## Step 4 — HEALTH.md Draft Production
 
 From the confirmed PATIENT.md, produce a HEALTH.md draft:
+
 - Extract specific conditions from Section 11 of PATIENT.md
 - Open and read `templates/criteria_library.md`.
 - Select and add relevant criteria from the library based on the stack and domain. Do not invent criteria if a suitable one exists in the library.
@@ -91,6 +99,7 @@ From the confirmed PATIENT.md, produce a HEALTH.md draft:
 ## Step 5 — AUTONOMY.md Draft Production
 
 From the autonomy preference given in intake:
+
 - Set the autonomy level
 - Pre-populate page conditions based on the project type and stack
 - Add any project-specific page conditions inferred from PATIENT.md constraints
@@ -163,6 +172,7 @@ Next Agent: @Conductor → bootstrap STATE.md, then @Team_Assembler
 # MINIMAL CONTEXT LOAD
 
 Load only these files at session start (in this order):
+
 1. `.forge/PATIENT.md` — identity and hard constraints
 2. `.forge/AUTONOMY.md` — autonomy level (required before any handoff decision)
 3. `.forge/STATE.md` — last 30 lines only (current phase and open blockers)
