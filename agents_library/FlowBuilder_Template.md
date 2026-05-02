@@ -6,8 +6,10 @@
 
 - **Node Validation**: Verify every node exists in the `connections{}` map.
 - **Type Extraction**: Produce `*.types.ts` for all workflow interfaces.
+- **Agent Node Anatomy**: Use the `================` separator pattern for all LLM nodes.
+- **Strict pt-BR**: All Agent messages and outputs must be in Brazilian Portuguese.
 - **Secure Credentials**: Use placeholders for all n8n auth nodes.
-- **Error Boundaries**: Ensure all workflows have fallback/error paths.
+- **Error Boundaries**: Ensure all workflows have fallback/error paths (return `{}`).
 - **API Matching**: Map output shapes directly to the API Contract in BLUEPRINT.md.
 
 # CONTEXT
@@ -24,7 +26,7 @@ Design, implement, and validate n8n workflows that are production-ready on first
 
 Convert n8n workflow data shapes into typed TypeScript interfaces, ensuring runtime behavior and compile-time contracts are always in sync.
 
-Enforce NEXUS/AMOS architectural invariants as native knowledge, not injected constraints — sequential chains, inline expressions, node notes, executionOrder v1.
+Enforce NEXUS/AMOS architectural invariants as native knowledge — sequential chains, Discovery vs Generation archetypes, Agent Node Anatomy, and strict pt-BR compliance.
 
 Validate every workflow JSON before handoff. A workflow that fails to import is a build failure.
 
@@ -55,6 +57,7 @@ TypeScript interfaces generated from n8n workflows must exactly match the workfl
 ## Step 1 — Workflow Scope Definition
 
 Before designing any workflow, define:
+
 - What triggers the workflow (webhook, schedule, manual, another workflow)
 - What data enters (exact shape with field names and types)
 - What the workflow must do (step by step, in plain language)
@@ -66,6 +69,7 @@ If any of these are undefined, ask before proceeding.
 ## Step 2 — Sequential Chain Design
 
 Design the node chain:
+
 - Map each step to a specific n8n node type
 - Verify each node connects to exactly one next node (no fan-outs)
 - Identify error paths — each node that can fail gets a dedicated error branch
@@ -73,6 +77,7 @@ Design the node chain:
 - Write the note for each node before writing the JSON
 
 Output a plain-language chain map before writing any JSON:
+
 ```
 Trigger → [node type] → [node type] → [node type] → Response
                                     ↓ (error)
@@ -95,6 +100,7 @@ Produce the complete workflow JSON following this structure:
 ```
 
 Rules per node:
+
 - Every node in `nodes[]` has a corresponding entry in `connections{}`
 - Orphaned nodes (in nodes[] but not in connections{}) are a critical error
 - Use `"error"` key for error output paths, not a second `"main"` output
@@ -128,6 +134,7 @@ When converting n8n workflow data shapes to typed TypeScript:
 5. Include JSDoc comments referencing the source workflow and node
 
 Interface output format:
+
 ```typescript
 /**
  * Data shape from [Workflow Name] — [Node Name] output
@@ -200,6 +207,7 @@ Next Agent: @Inspector → validate workflow import and interface accuracy
 # MINIMAL CONTEXT LOAD
 
 Load only these files at session start (in this order):
+
 1. `.forge/PATIENT.md` — identity and hard constraints
 2. `.forge/AUTONOMY.md` — autonomy level (required before any handoff decision)
 3. `.forge/STATE.md` — last 30 lines only (current phase and open blockers)

@@ -157,6 +157,7 @@ export default class Init extends Command {
         choices: [
           { name: 'pwa', message: 'PWA (Progressive Web App)' },
           { name: 'extension', message: 'Browser Extension' },
+          { name: 'n8n', message: 'n8n Automation' },
           { name: 'static', message: 'Single-File HTML Tool' },
           { name: 'vite', message: 'Vite / React / TypeScript' },
           { name: 'none', message: 'Clean Slate' },

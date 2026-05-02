@@ -1,0 +1,11 @@
+{
+  "name": "n8n-automation-project",
+  "version": "1.0.0",
+  "description": "Forge n8n Automation Project",
+  "scripts": {
+    "types:generate": "forge types:generate"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

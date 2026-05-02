@@ -14,7 +14,7 @@
 Built and maintained by the Wibx Labs team. Internal use only.
 
 **Status:** Operational. Industrial Phase.
-**Version:** 3.1.3 (Stable)
+**Version:** 3.1.4 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -41,20 +41,24 @@ curl -sSL https://raw.githubusercontent.com/Wibx-LABS/forge/main/install.sh | ba
 
 ## 🚀 Quick Start: Ignition Workflow
 
-Forge builds a **Contextual Engine** for your AI agents. 
+Forge builds a **Contextual Engine** for your AI agents.
 
 ### 1. Admission
+
 Run the CLI in your project directory (new or existing):
+
 ```bash
 forge init
 ```
 
 ### 2. Ignition
+
 Open your project in **Claude Code**, **Cursor**, or **Antigravity** and paste the **Ignition Prompt**:
 
 > "Initialize Forge mode. Read `.forge/PATIENT.md` for our objective and `.forge/AUTONOMY.md` for our rules. Adopt the persona in `.forge/agents/Architect_HYDRATED.md` and check `.forge/STATE.md` to begin Phase 1."
 
 ### 3. Orchestration
+
 The agent will now follow the **Chain of Thought** defined in its hydrated template, using the **Institutional DNA** and **Vertical Expertise** injected by the Forge engine.
 
 ---
@@ -275,10 +279,13 @@ forge/
 Forge 3.0 is designed for frictionless, industrial-grade onboarding. The CLI is now "self-aware."
 
 ### 🏠 Automatic Root Detection
+
 You no longer need to set `FORGE_HOME`. The CLI automatically traces its own path back to the Forge core, making it truly portable within your environment.
 
 ### 🏹 The Brand Hunter
+
 When you initialize a project, the engine executes a recursive search for the **WiBX DNA** (`Brand_Guidelines.md`). It searches in this order:
+
 1. **Local Project**: Custom guidelines for the specific patient.
 2. **Knowledge Base**: Master institutional guidelines in `knowledge/`.
 3. **Docs/Parent Folders**: Any intermediate documentation.
@@ -286,8 +293,9 @@ When you initialize a project, the engine executes a recursive search for the **
 This ensures every project is born with the correct WiBX identity (Neon Green accents, Red Hat Display typography, and Premium Dark Mode).
 
 ### 🧠 DNA vs. Expertise
-*   **`knowledge/`**: Stores **Institutional DNA**. Things that apply to every project (Brand, Security, Style).
-*   **`domains/`**: Stores **Vertical Expertise**. Things that only matter for specific types of projects (n8n logic, Banking schemas, etc).
+
+- **`knowledge/`**: Stores **Institutional DNA**. Things that apply to every project (Brand, Security, Style).
+- **`domains/`**: Stores **Vertical Expertise**. Things that only matter for specific types of projects (n8n logic, Banking schemas, etc).
 
 ---
 
@@ -393,6 +401,7 @@ Full backward compatibility. `project_overview.md` is accepted anywhere `PATIENT
 
 **CLI errors: "Cannot find module" or outdated DNA?**
 The Forge Engine (v3.1.3) is a living library. If you encounter errors or want the latest WiBX expertise, run the maintenance command:
+
 ```bash
 forge update
 ```
@@ -402,24 +411,29 @@ forge update
 ## Version History
 
 ### v3.1.2 — The Industrial Orchestrator
+
 _Released May 2026_
 
 **Objective:** Finalize the cinematic developer experience with zero-config automation and institutional DNA injection.
 
 **Key Features:**
+
 - **Zero-Config Engine:** Automatic root detection and environment mapping.
 - **Brand Hunter:** Recursive WiBX branding injection (Neon Green/Deep Black).
-- **Vertical Expertise:** Surgical hydration for Fintech, Web3, Content-AI, and Support.
+- **Vertical Expertise:** Surgical hydration for Fintech, Web3, Content-AI, Support, and n8n Automations.
+- **n8n Native Support:** First-class scaffold and orchestration for automation workflows.
 - **Self-Maintenance:** Integrated version checking and `forge update` command.
 
 ---
 
 ### v3.0.0 — The CLI Era (Forge Engine)
+
 _Released April 2026_
 
 **Objective:** Transition FORGE from a collection of templates into a standalone, downloadable CLI tool.
 
 **Core Pillars:**
+
 - **Forge CLI:** Unified binary for project initialization (`forge init`).
 - **Contextual Hydration:** Surgical markdown extraction for agent personas.
 - **Agent Swarm:** Orchestration of specialized agents with cross-repo awareness.
@@ -480,4 +494,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 3.1.3 (Stable)
+**Status:** SYSTEM ONLINE | **Version:** 3.1.4 (Stable)
