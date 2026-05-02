@@ -139,6 +139,7 @@ Standard routing (applies at all autonomy levels, subject to autonomy gates):
 - After `@Monitor` → review VITALS.md, resume treatment or page attending
 - After `@Sentinel` → update STATE.md and HEALTH.md with audit results
 - After `@Debugger` → QA fix, update STATE.md, resume treatment if Full autonomy
+- **Release Phase** → After all health criteria are MET, instruct developer to run `forge deploy` to trigger the unified pipeline.
 
 ## Step 7 — Artifact Verification
 

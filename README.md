@@ -14,7 +14,7 @@
 Built and maintained by the Wibx Labs team. Internal use only.
 
 **Status:** Operational. Industrial Phase.
-**Version:** 3.1.4 (Stable)
+**Version:** 3.2.0 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -146,6 +146,7 @@ Critical decisions always stop for attending confirmation. Routine execution doe
 | `/forge:audit`                   | Full security + quality review                                     |
 | `/forge:debug`                   | Isolate and fix one specific bug — accepts stack traces            |
 | `/forge:discharge`               | Formal discharge check against HEALTH.md                           |
+| `forge deploy`                   | Execute unified CI/CD deployment pipeline (Handoff Gate)           |
 | `/forge:ship <N>`                | Generate PR from verified phase work                               |
 | `/forge:quick`                   | Ad-hoc task with FORGE guarantees                                  |
 | `/forge:status`                  | Single-patient status with health and discharge eligibility        |
@@ -299,6 +300,33 @@ This ensures every project is born with the correct WiBX identity (Neon Green ac
 
 ---
 
+## Unified Deployment Pipeline (v3.2.0)
+
+Forge now includes a state-driven CI/CD deployment pipeline that handles local validation, routing, and automated stakeholder handoff.
+
+### 🛡️ Pre-Flight Integrity
+
+Network operations are prohibited until the local state is validated:
+- **Sync Verification**: Ensures the local branch is synchronized with remote HEAD.
+- **Secret Scanning**: Scans for exposed API keys (AWS, GitHub, Slack) using regex scanning.
+
+### 🚦 State-Driven Routing
+
+Deployment builds are dynamically routed based on the project format detected during `forge init`:
+- **Static/PWA**: Direct build and deployment via `rsync` to the Labs Nginx container.
+- **Vite/Dynamic**: Automated Docker containerization, GHCR push, and remote SSH trigger for pull/restart.
+
+### 📝 The Handoff Gate
+
+The `forge deploy` command interrupts execution to query the developer for business viability data:
+- **Objective**: Deployment business goal.
+- **Architecture**: Structural integrity summary.
+- **Cost**: Resource usage and infrastructure efficiency.
+
+This data is compiled into a `HANDOFF.md` manifest, committed, pushed, and used to automatically generate a Pull Request.
+
+---
+
 ### Per-Project Files (`.forge/`)
 
 ```
@@ -410,6 +438,21 @@ forge update
 
 ## Version History
 
+### v3.2.0 — The Pipeline Architect
+
+_Released May 2, 2026_
+
+**Objective:** Implement a unified CI/CD deployment pipeline with state-driven routing and automated handoff.
+
+**Key Features:**
+
+- **Unified Deployment:** Dynamic build routing for Static, PWA, and Vite projects.
+- **Integrity Shield:** Pre-flight sync verification and secret scanning.
+- **Handoff Gate:** Automated `HANDOFF.md` generation and PR creation with business data.
+- **Release Archiving:** Historical release manifests stored in `.forge/releases/`.
+
+---
+
 ### v3.1.2 — The Industrial Orchestrator
 
 _Released May 2026_
@@ -494,4 +537,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 3.1.4 (Stable)
+**Status:** SYSTEM ONLINE | **Version:** 3.2.0 (Stable)

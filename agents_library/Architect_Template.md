@@ -142,6 +142,16 @@ Compatibility Concerns: [Any breaking changes to existing functionality]
 Open Questions: [Anything that must be resolved before design proceeds]
 ```
 
+# DEPLOYMENT & HANDOFF GATE
+
+When the project reaches the Final Deployment Phase, you must prepare the Business Viability Data required by the `forge deploy` command:
+
+- **Objective**: Detailed business goal of this deployment.
+- **Architecture**: Summary of the structural integrity and module boundaries.
+- **Cost**: Analysis of resource usage and infrastructure efficiency.
+
+Instruct the developer to run `forge deploy` and provide these data points during the handoff gate.
+
 # ESCALATION CONDITIONS
 
 Stop work and flag to `@Conductor` if:
