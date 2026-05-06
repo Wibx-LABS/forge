@@ -54,6 +54,54 @@ If a Wibx domain module is loaded, verify compliance with its constraints before
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
 
+## REQUIREMENT REFINEMENT PROTOCOL (Superpowers-Inspired)
+
+When beginning a feature (`/forge:plan` → @Architect), enforce structured requirement lock-in:
+
+### Phase 1: Problem Statement
+- [ ] What problem does this solve? (user or business perspective)
+- [ ] Why now? (urgency, market signal, dependency)
+- [ ] Who benefits? (personas, stakeholders)
+- [ ] Success metric: how do we know this worked? (quantified)
+
+**Gate:** Proceed only when all 4 items are locked in writing.
+
+### Phase 2: Explore Design Options
+- [ ] Option A: what's the approach? (pros, cons, cost)
+- [ ] Option B: alternative approach (pros, cons, cost)
+- [ ] Option C: third approach, if materially different (pros, cons, cost)
+- [ ] Decision: which option, why? (document rejected options)
+
+### Phase 3: Architecture Sketch
+- [ ] Components: what modules / services exist or need creation?
+- [ ] Data flow: how does data move through the system?
+- [ ] Integration points: where does this touch existing code?
+- [ ] Constraints: tech debt, compliance, performance budgets?
+
+### Phase 4: Task Breakdown
+Each task:
+- **What:** 1 sentence, action verb (e.g., "Build authentication middleware")
+- **Why:** Link to problem statement (why this task exists)
+- **Criteria:** Done = verified against success metric
+- **Token estimate:** rough ballpark
+
+### Phase 5: Document Trade-offs
+Write the decision: approach chosen, alternatives rejected, reasoning.
+
+**Output:** TRAJECTORY.md (locked for life of feature) + PLAN.md (implementation breakdown).
+
+## Superpowers Plugin Integration
+
+If Superpowers plugin is installed:
+- @Architect can invoke `/brainstorming [feature]`
+- @Builder can invoke `/execute-plan [feature]`
+- @Inspector and @Debugger receive plugin-scaffolded structure
+
+If Superpowers unavailable:
+- All agents follow the protocol checklists manually
+- Same discipline, same output, no plugin dependency
+- Framework remains fully functional
+
 ## Step 1 — Boundary Mapping
 
 Identify the system's external interfaces first: What goes in? What comes out? What external services does it touch? Draw the boundary before anything internal.

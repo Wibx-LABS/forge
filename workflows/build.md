@@ -22,6 +22,8 @@ Confirm:
 - Planning is marked complete for this phase
 
 Read AUTONOMY.md and register the autonomy level for this execution run.
+Parse the `model_routing` section from `AUTONOMY.md` to determine models for `execution` and `qa`.
+Log the selected models for this phase. If a reduced-cost model is routed but unavailable, fallback to Claude.
 
 ---
 
@@ -44,12 +46,12 @@ For each stage, in order:
 ### 3a — Spawn @Builder Agents
 
 For plans in the current stage with no unmet dependencies:
-- Spawn a `@Builder` agent with a fresh context window
+- Spawn a `@Builder` agent (using the `execution` model) with a fresh context window
 - Provide: PLAN.md, PATIENT.md, BLUEPRINT.md, CONTEXT.md (if exists), RESEARCH.md (if exists)
 
 Independent plans within the same stage execute sequentially or via agent sub-process.
 
-If `@FlowBuilder` is on the care team and the plan involves n8n workflows or TypeScript interface generation, route to `@FlowBuilder` instead of `@Builder`.
+If `@FlowBuilder` is on the care team and the plan involves n8n workflows or TypeScript interface generation, route to `@FlowBuilder` (using the `execution` model) instead of `@Builder`.
 
 ### 3b — Collect Builder Results
 
@@ -74,7 +76,7 @@ Do not proceed to `@Inspector` until `.forge/REALITY.md` is populated.
 
 ### 3d — QA Gate
 
-For each completed task, invoke `@Inspector`:
+For each completed task, invoke `@Inspector` (using the `qa` model):
 1. @Inspector reviews against PLAN.md acceptance criteria and the raw output in `.forge/REALITY.md` ONLY.
 2. Ensure @Inspector does NOT receive any self-review judgments from @Builder.
 3. Results appended to `.forge/qa_report.md`.

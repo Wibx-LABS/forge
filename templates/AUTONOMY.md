@@ -105,6 +105,34 @@
 
 ---
 
+## Model Routing (Optional)
+
+**Default:** All agents use premium model (Claude).
+
+For cost optimization, specify which agent roles use reduced-cost model (GLM via z.ai):
+
+```yaml
+model_routing:
+  planning: premium        # @Architect, @Strategist, @Triage — complex reasoning
+  execution: reduced-cost  # @Builder, @FlowBuilder — follows plan
+  qa: premium              # @Inspector, @Sentinel — judgment calls
+  orchestration: reduced-cost  # @Conductor, @Monitor — routine state management
+  debugging: premium       # @Debugger — root cause analysis requires reasoning
+```
+
+Omit section to keep all phases on premium (default, recommended if unsure).
+
+**Rationale:**
+- Planning phases involve novel design decisions → Claude
+- Execution phases follow a pre-made plan → GLM sufficient, 5-10x cheaper
+- QA needs judgment on edge cases → Claude
+- Orchestration is state management → GLM sufficient
+- Debugging needs reasoning for root cause → Claude
+
+**Setup:** Requires z.ai API credentials configured. See `docs/COST_OPTIMIZATION.md` for setup.
+
+---
+
 ## Autonomy Override
 
 > The attending can override autonomy level mid-session at any time.

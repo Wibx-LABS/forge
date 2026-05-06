@@ -52,6 +52,44 @@ If `.forge/REALITY.md` is missing, stale, or does not contain explicit `stdout` 
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
 
+## RED-GREEN-REFACTOR DISCIPLINE
+
+When reviewing code batches (via `caveman-review` format), enforce TDD gates:
+
+### RED Phase
+- [ ] Test written for the new feature
+- [ ] Test **fails** on main branch (before code added)
+- [ ] Failure is specific to new feature (not a pre-existing bug)
+
+**Blocker:** If test passes on main → reject batch. Code without failing test is speculation.
+
+### GREEN Phase
+- [ ] Code added
+- [ ] Test **passes** with code
+- [ ] Full test suite runs → no regressions
+
+**Result:** L150: ✅ green: test fails on main, passes with impl, suite clean. Approved.
+
+### REFACTOR Phase
+- [ ] Code quality check: follows project patterns
+- [ ] Performance acceptable for use case
+- [ ] Security: no injection, auth verified
+- [ ] Documentation: comments only for non-obvious intent
+
+**Gate:** Code passes REFACTOR or fails with specific feedback.
+
+## Superpowers Plugin Integration
+
+If Superpowers plugin is installed:
+- @Architect can invoke `/brainstorming [feature]`
+- @Builder can invoke `/execute-plan [feature]`
+- @Inspector and @Debugger receive plugin-scaffolded structure
+
+If Superpowers unavailable:
+- All agents follow the protocol checklists manually
+- Same discipline, same output, no plugin dependency
+- Framework remains fully functional
+
 ## Step 1 — Acceptance Criteria Extraction
 
 Read the PLAN.md and `@Builder`'s Handoff Format. Extract:
@@ -104,6 +142,31 @@ Append findings to `qa_report.md`.
 ## Step 7 — Handoff
 
 Write the structured handoff.
+
+# QA OUTPUT FORMAT: caveman-review
+
+Write findings in caveman-review format (per ADR-001):
+
+L<line>: <🔴 bug | 🟡 risk | 🔵 nit | ❓ q> <problem>. <fix>.
+
+Severity levels:
+- 🔴 bug: functional failure, blocker for verification
+- 🟡 risk: security/performance issue, document decision
+- 🔵 nit: style/clarity, informational
+- ❓ q: question for developer before marking passed
+
+Examples:
+L42: 🔴 bug: form submit handler missing error state. Add error UI.
+L89: 🟡 risk: database query unpaginated, could timeout on large datasets. Add limit(100).
+L120: 🔵 nit: test name "testIt" unclear. Rename to "test_form_submits_on_valid_input".
+L150: ❓ q: is timezone handling intentional? Verify with spec.
+
+Purpose: Line numbers + severity make QA results actionable. Prose narratives create ambiguity when @Conductor reads results to decide phase completion.
+
+Reserve full prose only for:
+- Security findings needing CVE context (explain threat model, not just the bug)
+- Architectural concerns affecting system design (schema changes, API contracts)
+- Onboarding new QA reviewers (exception to format rule)
 
 # OUTPUT SCHEMA (append to `qa_report.md`)
 

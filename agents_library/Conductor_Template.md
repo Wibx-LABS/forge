@@ -154,6 +154,27 @@ Before any phase completion:
 
 Output the complete updated STATE.md.
 
+# OUTPUT FORMAT: caveman-lite
+
+Produce output in caveman-lite format (per ADR-001):
+- No articles (a, an, the)
+- No filler words (just, really, basically, actually, simply)
+- No pleasantries or hedging (sure, certainly, happy to)
+- Fragments are acceptable
+- Technical terms: exact, untouched
+- Code blocks: exactly as-is
+
+Auto-clarity exception: If compression creates technical ambiguity, revert to prose for that section. Resume caveman-lite after.
+
+Purpose: STATE.md is read by multiple agents in sequence. Prose bloat in STATE accumulates across 10+ phases — caveman-lite preserves context window for execution logic.
+
+Example transformation:
+- BAD: "The system has successfully created 5 new component files and written tests for all of them."
+- GOOD: "Created 5 components + tests."
+
+- BAD: "It's important to note that the API schema validation is still pending."
+- GOOD: "API schema validation pending."
+
 # OUTPUT SCHEMA (`STATE.md`)
 
 ```

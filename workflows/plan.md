@@ -12,6 +12,7 @@ Read in order:
 3. `.forge/ROADMAP.md` — find the target phase
 4. `.forge/STATE.md` — current state, decisions, blockers
 5. `.forge/phases/XX-phase-name/XX-CONTEXT.md` — user preferences (if discuss was run)
+6. `.forge/AUTONOMY.md` — read `model_routing` configuration
 
 Confirm:
 - The phase exists and is PENDING or IN PROGRESS
@@ -24,7 +25,8 @@ Confirm:
 
 If `research: true` in `.forge/config.json` (default):
 
-Invoke `@Scout` to research the specific domain of this phase:
+Parse `model_routing` from `AUTONOMY.md` for `orchestration`. Log the selected model. Fail gracefully and fall back to Claude if GLM is unavailable.
+Invoke `@Scout` (using the designated orchestration model) to research the specific domain of this phase:
 - How to implement the features planned for this phase
 - Library options and trade-offs
 - Integration patterns with existing code
@@ -40,7 +42,8 @@ If CONTEXT.md exists, pass it to `@Scout` so research is guided by user preferen
 
 If `BLUEPRINT.md` does not exist yet:
 
-Invoke `@Architect` to produce `.forge/BLUEPRINT.md` using the full Chain of Thought.
+Parse `model_routing` from `AUTONOMY.md` for `planning`. Log the selected model. Fail gracefully and fall back to Claude if GLM is unavailable.
+Invoke `@Architect` (using the designated planning model) to produce `.forge/BLUEPRINT.md` using the full Chain of Thought.
 
 Present the blueprint to the user for approval before planning tasks:
 - System Overview
@@ -56,7 +59,8 @@ If `@Sentinel` is on the team, have them review the blueprint for security conce
 
 ## STEP 4 — Task Planning
 
-Invoke `@Strategist` to decompose the phase into atomic task plans.
+Parse `model_routing` from `AUTONOMY.md` for `planning`. Log the selected model. Fail gracefully and fall back to Claude if GLM is unavailable.
+Invoke `@Strategist` (using the designated planning model) to decompose the phase into atomic task plans.
 
 `@Strategist` will:
 1. Analyse the phase scope from ROADMAP.md

@@ -19,12 +19,14 @@ Accept any of the following as valid intake — do not require prose if evidence
 If none of these are provided and the report is vague (e.g., "it doesn't work"), ask for one of the above before proceeding. Do not debug without evidence.
 
 Read `.forge/STATE.md` and `.forge/AUTONOMY.md` for context.
+Parse the `model_routing` section from `AUTONOMY.md` to determine models for `debugging` and `qa`.
+Log the selected models. If a reduced-cost model is routed but unavailable, fallback to Claude.
 
 ---
 
 ## STEP 2 — Diagnostic
 
-Invoke `@Debugger` with the full Chain of Thought:
+Invoke `@Debugger` (using the `debugging` model) with the full Chain of Thought:
 
 1. Hypothesis formation (2-3 likely causes, ranked by likelihood)
 2. Root cause isolation (trace execution path from evidence to failure point)
@@ -37,7 +39,7 @@ Invoke `@Debugger` with the full Chain of Thought:
 
 ## STEP 3 — QA on Fix
 
-Invoke `@Inspector` to verify:
+Invoke `@Inspector` (using the `qa` model) to verify:
 - The fix resolves the reported bug
 - No regressions in affected modules
 - Edge cases around the fix are covered
