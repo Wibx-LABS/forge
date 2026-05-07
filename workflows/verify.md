@@ -67,6 +67,29 @@ Update STATE.md with UAT results.
 
 ---
 
+---
+
+# ACCESSIBILITY AUDIT (Final Gate)
+
+Before phase completion:
+
+1. **@Inspector performs WCAG 2.1 Level AA audit:**
+   - [ ] Form labels present on all inputs
+   - [ ] Alerts use icon + text (not color alone)
+   - [ ] Keyboard navigation complete (no mouse-only workflows)
+   - [ ] Screen reader compatibility (test with NVDA/JAWS)
+   - [ ] Contrast ratios meet 4.5:1 (normal) / 3:1 (large)
+
+2. **Auto-fail criteria:**
+   - Any WCAG gate fails = blocker
+   - EHR applications must be accessible (regulatory + ethics)
+
+3. **Resolution:** Remediate or escalate to @Architect for design exception
+
+**Reference:** See Inspector_Template.md → Accessibility Gates (WCAG 2.1 Level AA) section for detailed criteria and examples.
+
+---
+
 ## 🛑 HARD STOP
 
 **If all tests passed:**

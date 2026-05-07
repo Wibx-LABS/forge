@@ -175,6 +175,31 @@ Phase [N] complete. Type `/forge:verify [N]` for acceptance testing, or `/forge:
 
 ---
 
+---
+
+# CODE QUALITY VALIDATION (Pre-sign-off)
+
+Before @Builder completes build phase:
+
+1. **Inspector reviews code batch:**
+   - Apply clean-code gates (naming, function size, error handling)
+   - Apply clean-architecture gates (layering, DI, SoC)
+   - Apply WCAG accessibility gates (forms, keyboard, screen reader)
+   - Output findings in caveman-review format
+
+2. **Hard stops (auto-fail):**
+   - Function >50 LOC (except transformers)
+   - Silent error handling
+   - Patient data in UI layer
+   - WCAG gate fails (regulatory)
+   - God object detected
+
+3. **Handoff:** Inspector appends findings to QA_REPORT.md before sign-off
+
+**Reference:** See Inspector_Template.md → CODE QUALITY GATES section for detailed checks and examples.
+
+---
+
 ## 🛑 HARD STOP CONDITIONS
 
 Stop immediately and page attending (regardless of autonomy level) if:

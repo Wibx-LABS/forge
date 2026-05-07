@@ -143,6 +143,128 @@ Append findings to `qa_report.md`.
 
 Write the structured handoff.
 
+---
+
+# CODE QUALITY GATES
+
+Enforce clean-code, clean-architecture, and accessibility (WCAG 2.1 Level AA) standards during code review.
+
+## Clean Code Gates
+
+Assess all code against:
+
+| Gate | Rule | Why (EHR Context) |
+|------|------|-------------------|
+| **Naming** | Variables/functions self-document (no "d", "temp", "x") | Medical code must be readable; unclear names risk patient safety |
+| **Function size** | ≤50 LOC (exception: data transformers <100) | Smaller functions = easier to test + understand medical logic |
+| **Error handling** | Explicit, no silent failures | Patient workflows require obvious error states; silent failures = safety risk |
+| **Comments** | WHY only, not WHAT (code self-documents) | Medical logic may need clinical context; excessive comments hide intent |
+| **Testing** | All public APIs tested; 100% on patient-affecting logic | Untested patient code = regulatory/safety risk |
+
+### Examples
+
+```
+🔴 bug: function 200 LOC (clean-code: max 50). Break into smaller units.
+🔵 nit: variable "p" ambiguous (medical code, use "patient"). Rename.
+🔴 bug: exception caught silently (error handling: explicit required). Add error UI.
+🔵 nit: comment "do stuff" not helpful. Remove or add clinical context.
+🔴 bug: patient delete logic untested. Add test case.
+```
+
+## Clean Architecture Gates
+
+Apply to code organization and cross-file impact:
+
+| Gate | Rule | Why (EHR Context) |
+|------|------|-------------------|
+| **Layering** | Presentation ↔ Business Logic ↔ Data (strict separation) | Patient data must not leak into UI layer; regulatory requirement |
+| **Dependency direction** | Outer → Inner (UI calls business logic, not reverse) | Prevents patient data from escaping to presentation |
+| **Separation** | Medical logic separate from EHR infrastructure | Allows medical logic reuse + independent testing |
+| **No god objects** | Each entity (Patient, Admission, Encounter) = single responsibility | Large objects = hard to test + maintain; safety risk in medical domain |
+| **Dependency injection** | External services injected, not instantiated inline | Allows testing with mock services; critical for safety testing |
+
+### Examples
+
+```
+🟡 risk: patient data modified in UI layer (clean-arch: violates layer). Move to service layer.
+🟡 risk: business logic calls UI directly (clean-arch: reverse dependency). Refactor.
+🔴 bug: Patient object handles admission, discharge, billing (clean-arch: god object). Split.
+🟡 risk: database instantiated inline, not injected. Add DI for testability.
+```
+
+## Accessibility Gates (WCAG 2.1 Level AA) — REGULATORY
+
+**All gates must pass before merge.**
+
+| Gate | Rule | WCAG Criterion |
+|------|------|-----------------|
+| **Form labels** | All inputs have `<label>` elements | 1.3.1 Info & Relationships |
+| **Color + context** | Alerts use icon + text, not color alone | 1.4.1 Use of Color |
+| **Keyboard nav** | All workflows accessible without mouse | 2.1.1 Keyboard |
+| **Screen reader** | Form labels, headers, errors announce | 4.1.2 Name, Role, Value |
+| **Contrast ratio** | Text ≥4.5:1 (normal), ≥3:1 (large) | 1.4.3 Contrast |
+
+### Examples
+
+```
+🟡 risk: form input missing <label> (WCAG 1.3.1). Add label element.
+🟡 risk: alert uses red color only (WCAG 1.4.1). Add icon + text.
+🟡 risk: button not keyboard accessible (WCAG 2.1.1). Make focusable.
+🟡 risk: table header not announced to screen reader (WCAG 4.1.2). Add scope.
+🟡 risk: text contrast 3.2:1 (WCAG 1.4.3: need 4.5:1). Darken text.
+```
+
+## caveman-review Output Format
+
+Findings included in QA_REPORT.md using caveman-review:
+
+```
+L42: 🔴 bug: function 200 LOC (clean-code: max 50). Refactor into smaller units.
+L89: 🟡 risk: patient data in UI layer (clean-arch: violates layer). Move to service layer.
+L120: 🔵 nit: variable "p" ambiguous (medical code, use "patient"). Rename.
+L150: 🟡 risk: form label missing on patient ID input (accessibility: WCAG 1.3.1). Add <label>.
+L180: 🔵 nit: alert uses color only (accessibility: WCAG 1.4.1). Add icon for color-blind users.
+L200: ✅ pass: clean layers, DI used, 100% test coverage, WCAG AA compliant. Approved.
+```
+
+**Severity:**
+- 🔴 bug: Blocker (must fix before merge)
+- 🟡 risk: Blocker (must document decision before merge)
+- 🔵 nit: Informational (nice-to-have, non-blocking)
+- ✅ pass: Approved
+
+## When to Invoke
+
+@Inspector uses this skill during:
+1. Code review phase (every batch)
+2. Regression check (existing functionality)
+3. Final sign-off (before phase completion)
+
+## Hard Stops (Auto-Fail)
+
+Code fails review if:
+
+- ❌ Function >50 LOC (except transformers)
+- ❌ Silent error handling (no explicit throw/return)
+- ❌ Patient data in UI layer
+- ❌ Any WCAG gate fails (regulatory requirement)
+- ❌ God object detected (Patient, Admission, Encounter >1 responsibility)
+- ❌ Missing tests on patient-affecting logic
+
+These are non-negotiable for EHR. Escalate if unresolvable.
+
+## Exceptions
+
+**When clean-code exceptions apply:**
+
+- Data transformer functions: ≤100 LOC (parsing, validation, transformation)
+- Legacy integration code: document why layers can't be respected
+- Third-party library integration: document external constraint
+
+**But:** Patient-affecting logic, accessibility, and separation never have exceptions.
+
+---
+
 # QA OUTPUT FORMAT: caveman-review
 
 Write findings in caveman-review format (per ADR-001):

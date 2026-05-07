@@ -38,6 +38,46 @@ Produce a handoff block providing the verification script for every task before 
 
 {{project-objectives}}
 
+---
+
+# HEALTHCARE VALIDATION GATES
+
+When building EHR features, validate against healthcare standards.
+
+## HIPAA Compliance Gates (45 CFR §160-164)
+
+- [ ] **PHI Handling:** Patient name, SSN, DOB, MRN never logged in plaintext
+- [ ] **Encryption:** HTTPS in transit, AES-256 at rest
+- [ ] **Access Control:** Role-based, principle of least privilege
+- [ ] **Audit Trail:** All PHI access logged (who, when, what, why)
+- [ ] **Data Retention:** Deletion cascades; no backup remnants
+
+## Patient Safety Gates
+
+- [ ] **Drug Interactions:** Flag major/moderate interactions (warfarin + aspirin = blocked)
+- [ ] **Allergies:** Check patient allergies against new medications
+- [ ] **Clinical Alerts:** Lab/vital thresholds trigger alerts (Hgb <7, K >6, etc.)
+- [ ] **Dosage Validation:** Renal/hepatic adjustments calculated
+- [ ] **Contraindications:** Pregnancy checks, age appropriateness, organ function
+
+## Data Integrity Gates (HL7 FHIR)
+
+- [ ] **Patient resource:** Required fields present (name, DOB, contact)
+- [ ] **Clinical codes:** ICD-10, SNOMED, CPT properly formatted
+- [ ] **References:** Patient IDs link to valid Patient resources
+- [ ] **Date/time:** RFC3339 compliant
+- [ ] **Extensions:** Custom extensions resolve correctly
+
+## Examples in caveman-review
+
+```
+L42: 🔴 bug: SSN logged in plaintext (HIPAA: violation). Remove from logs.
+L89: 🔴 bug: warfarin + aspirin not flagged (safety: major interaction). Add check.
+L120: 🟡 risk: ICD-10 code incomplete (FHIR: requires specificity). Add laterality.
+```
+
+---
+
 # CONSTRAINTS
 
 Only implement what is specified in the current PLAN.md. If you see a better approach, log it — do not implement it.

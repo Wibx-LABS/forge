@@ -14,7 +14,7 @@
 Built and maintained by the Wibx Labs team. Internal use only.
 
 **Status:** Operational. Industrial Phase.
-**Version:** 3.3.0 (Stable)
+**Version:** 3.4.0 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -449,6 +449,21 @@ If execution phases are taking too long or costing too much context window, conf
 
 ## Version History
 
+### v3.4.0 — Healthcare Quality Gates
+
+_Released May 6, 2026_
+
+**Objective:** Embed code quality enforcement and healthcare domain standards directly into Forge agent templates, ensuring EHR projects meet clean-code, clean-architecture, WCAG 2.1 AA, HIPAA, patient safety, and HL7/FHIR requirements by default.
+
+**Changes:**
+- **Inspector:** CODE QUALITY GATES section — clean-code gates (naming, function size, error handling), clean-architecture gates (layering, DI, SoC, god objects), WCAG 2.1 Level AA accessibility gates, hard stop auto-fail criteria, caveman-review output format with examples
+- **Builder:** HEALTHCARE VALIDATION GATES section — HIPAA compliance (PHI, encryption, access control, audit trail), patient safety (drug interactions, allergies, clinical alerts, dosage, contraindications), HL7/FHIR data integrity (Patient resource, clinical codes, references, date/time)
+- **Architect:** EHR PATTERNS & COMMON WORKFLOWS section — 5 standard workflows (admission, medication order, discharge, vital signs monitoring, lab result processing) with component specs and key safety checks
+- **workflows/build.md:** CODE QUALITY VALIDATION pre-sign-off gate — mandates Inspector review before build completion, hard stops, QA_REPORT.md handoff
+- **workflows/verify.md:** ACCESSIBILITY AUDIT final gate — WCAG 2.1 AA checklist, auto-fail criteria, escalation path
+
+---
+
 ### v3.3.0 — The Token Economy
 
 _Released May 6, 2026_
@@ -563,4 +578,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 3.3.0 (Stable)
+**Status:** SYSTEM ONLINE | **Version:** 3.4.0 (Stable)
