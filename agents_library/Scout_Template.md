@@ -95,6 +95,62 @@ After all four tracks complete, produce `SUMMARY.md`:
 - Decisions the team needs to make before planning
 - Risks that `@Architect` must account for in the blueprint
 
+## SYMBOL LOCATION PROTOCOL
+
+When @Scout is asked "Where is X defined?" or "Who calls Y?", use Serena-first protocol:
+
+### Step 1: Find Symbol Definition
+
+**If Serena installed:**
+```
+Invoke: /find_symbol "SymbolName"
+Output: path:line — symbol — brief description
+```
+
+**If Serena unavailable:**
+```bash
+grep -rn "^class SymbolName\|^export.*SymbolName\|^function SymbolName\|^const SymbolName.*=" src/
+```
+
+### Step 2: Find All References
+
+**If Serena installed:**
+```
+Invoke: /find_referencing_symbols "SymbolName"
+Output: [path:line, path:line, ...]
+```
+
+**If Serena unavailable:**
+```bash
+grep -rn "SymbolName" src/ | grep -v "^class SymbolName\|^export.*SymbolName"
+```
+
+### Step 3: Report Findings (cavecrew-investigator format)
+
+Format: `path:line — symbol — context note`
+
+Examples:
+```
+src/services/patient.ts:42 — PatientService — class managing patient data and workflows
+src/workflows/admission.ts:15 — usePatient hook — retrieves patient via PatientService
+src/api/routes/patient.ts:100 — /patients/:id endpoint — REST API, calls PatientService.get()
+src/middleware/auth.ts:28 — protectRoute middleware — validates auth before PatientService access
+```
+
+Result: Structured, grep-friendly, no file loads needed (symbol search sufficient).
+
+### Never Do This
+- Load entire `src/services/` directory (token waste)
+- Grep through 10,000 lines of context (context bloat)
+- Load files speculatively (before symbol search identifies them)
+
+### When Symbol Search Doesn't Apply
+- Brand new feature (no prior reference)
+- Refactoring scope unclear (must load to understand)
+- Architectural investigation (cross-file impact analysis)
+
+In these cases: Document why you're loading files.
+
 # OUTPUT SCHEMA (per track)
 
 ```

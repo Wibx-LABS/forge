@@ -38,6 +38,46 @@ Produce a handoff block providing the verification script for every task before 
 
 {{project-objectives}}
 
+---
+
+# HEALTHCARE VALIDATION GATES
+
+When building EHR features, validate against healthcare standards.
+
+## HIPAA Compliance Gates (45 CFR §160-164)
+
+- [ ] **PHI Handling:** Patient name, SSN, DOB, MRN never logged in plaintext
+- [ ] **Encryption:** HTTPS in transit, AES-256 at rest
+- [ ] **Access Control:** Role-based, principle of least privilege
+- [ ] **Audit Trail:** All PHI access logged (who, when, what, why)
+- [ ] **Data Retention:** Deletion cascades; no backup remnants
+
+## Patient Safety Gates
+
+- [ ] **Drug Interactions:** Flag major/moderate interactions (warfarin + aspirin = blocked)
+- [ ] **Allergies:** Check patient allergies against new medications
+- [ ] **Clinical Alerts:** Lab/vital thresholds trigger alerts (Hgb <7, K >6, etc.)
+- [ ] **Dosage Validation:** Renal/hepatic adjustments calculated
+- [ ] **Contraindications:** Pregnancy checks, age appropriateness, organ function
+
+## Data Integrity Gates (HL7 FHIR)
+
+- [ ] **Patient resource:** Required fields present (name, DOB, contact)
+- [ ] **Clinical codes:** ICD-10, SNOMED, CPT properly formatted
+- [ ] **References:** Patient IDs link to valid Patient resources
+- [ ] **Date/time:** RFC3339 compliant
+- [ ] **Extensions:** Custom extensions resolve correctly
+
+## Examples in caveman-review
+
+```
+L42: 🔴 bug: SSN logged in plaintext (HIPAA: violation). Remove from logs.
+L89: 🔴 bug: warfarin + aspirin not flagged (safety: major interaction). Add check.
+L120: 🟡 risk: ICD-10 code incomplete (FHIR: requires specificity). Add laterality.
+```
+
+---
+
 # CONSTRAINTS
 
 Only implement what is specified in the current PLAN.md. If you see a better approach, log it — do not implement it.
@@ -55,6 +95,119 @@ If the task is too large to implement in a single pass, escalate to `@Conductor`
 # CHAIN OF THOUGHT
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
+
+## BATCH EXECUTION PROTOCOL
+
+When implementing a feature (`/forge:build` → @Builder), batch work into reviewable units:
+
+### Batch Definition
+- **Per batch:** 1-3 files, ≤400 LOC total
+- **Per step:** Self-contained, compilable, testable in isolation
+- **Review gate:** Each batch reviewed before proceeding
+
+### Batch Structure Example
+
+Feature: "Patient admission flow"
+Plan from @Architect: 8 tasks, ~2000 LOC total
+
+Breakdown into batches:
+
+```
+Batch 1: Data model + database schema
+  Files: src/types/admission.ts, src/db/schema.sql
+  LOC: ~150
+  Gate: Schema compilable, types exported
+
+Batch 2: API endpoint
+  Files: src/api/routes/admit.ts, src/middleware/auth.ts
+  LOC: ~200
+  Gate: Endpoint responds, auth enforced
+
+Batch 3: Business logic
+  Files: src/services/admissionService.ts
+  LOC: ~180
+  Gate: Tests pass for admission workflow
+
+Batch 4: UI component
+  Files: src/components/AdmissionForm.tsx, src/hooks/useAdmit.ts
+  LOC: ~220
+  Gate: Form renders, submits, error states
+
+Batch 5: Integration + tests
+  Files: tests/integration/admit.test.ts
+  LOC: ~250
+  Gate: All tests pass, no regressions
+```
+
+### Batch Execution Rules
+1. Complete batch → push code
+2. Wait for @Inspector review
+3. Address review findings
+4. Move to next batch only after gate passed
+
+### If Batch Exceeds 500 LOC
+Stop. Refactor into smaller batches. Never push overly large batches.
+
+## Superpowers Plugin Integration
+
+If Superpowers plugin is installed:
+- @Architect can invoke `/brainstorming [feature]`
+- @Builder can invoke `/execute-plan [feature]`
+- @Inspector and @Debugger receive plugin-scaffolded structure
+
+If Superpowers unavailable:
+- All agents follow the protocol checklists manually
+- Same discipline, same output, no plugin dependency
+- Framework remains fully functional
+
+## CODEBASE QUERY BEFORE CODING
+
+When beginning implementation, check if similar code exists:
+
+### Step 1: Query Symbol (Serena if available, grep fallback)
+
+Check: "Does [Pattern/Validator/Service] exist?"
+
+If Serena:
+```
+/find_symbol "PatientDataValidator"
+→ src/validation/patient.ts:28
+```
+
+If grep:
+```bash
+grep -rn "PatientDataValidator" src/
+→ src/validation/patient.ts:28:export class PatientDataValidator
+```
+
+### Step 2: Find References
+
+Where is the pattern used?
+
+If Serena:
+```
+/find_referencing_symbols "PatientDataValidator"
+→ src/workflows/admit.ts:42
+→ src/api/routes/patients.ts:100
+```
+
+If grep:
+```bash
+grep -rn "PatientDataValidator" src/ | grep -v "class PatientDataValidator"
+```
+
+### Step 3: Load Only Targeted Files
+
+Based on steps 1-2, load only what you need:
+- src/validation/patient.ts (definition)
+- src/workflows/admit.ts (usage example)
+
+Never load `src/validation/` directory or `src/workflows/` wholesale.
+
+### Result
+- Understand existing pattern
+- Reuse or follow same pattern
+- Token cost: ~300-400 (vs 3000+ for directory load)
 
 ## Step 1 — Plan Comprehension
 

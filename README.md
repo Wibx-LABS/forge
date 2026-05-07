@@ -14,7 +14,7 @@
 Built and maintained by the Wibx Labs team. Internal use only.
 
 **Status:** Operational. Industrial Phase.
-**Version:** 3.2.0 (Stable)
+**Version:** 3.4.0 (Stable)
 **Repository:** [FORGE](https://github.com/Wibx-LABS/forge)
 scientist: [Caio Maciel](https://github.com/kvag0)
 
@@ -194,6 +194,14 @@ Plans are grouped by dependency into sequential stages. All plans in Stage 1 mus
 │                                                           │
 └───────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Token Economy
+
+Forge uses a Token Economy Architecture to prevent context rot and optimize costs.
+- **Artifact Compression**: Inter-agent artifacts use formats like `caveman-lite`, `caveman-review`, and `cavecrew-investigator` to remove filler words and prose bloat, preserving the context window for actual execution logic. Target compression is 30-35% size reduction for `STATE.md`.
+- **Model Routing**: Configure `model_routing` in `AUTONOMY.md` to route complex planning/debugging to premium models (Claude) and routine execution to reduced-cost models (GLM via z.ai). See `docs/COST_OPTIMIZATION.md` for details.
 
 ---
 
@@ -434,9 +442,42 @@ The Forge Engine (v3.1.3) is a living library. If you encounter errors or want t
 forge update
 ```
 
+**My phase is slow?**
+If execution phases are taking too long or costing too much context window, configure GLM routing for execution agents. See `docs/COST_OPTIMIZATION.md`.
+
 ---
 
 ## Version History
+
+### v3.4.0 — Healthcare Quality Gates
+
+_Released May 6, 2026_
+
+**Objective:** Embed code quality enforcement and healthcare domain standards directly into Forge agent templates, ensuring EHR projects meet clean-code, clean-architecture, WCAG 2.1 AA, HIPAA, patient safety, and HL7/FHIR requirements by default.
+
+**Changes:**
+- **Inspector:** CODE QUALITY GATES section — clean-code gates (naming, function size, error handling), clean-architecture gates (layering, DI, SoC, god objects), WCAG 2.1 Level AA accessibility gates, hard stop auto-fail criteria, caveman-review output format with examples
+- **Builder:** HEALTHCARE VALIDATION GATES section — HIPAA compliance (PHI, encryption, access control, audit trail), patient safety (drug interactions, allergies, clinical alerts, dosage, contraindications), HL7/FHIR data integrity (Patient resource, clinical codes, references, date/time)
+- **Architect:** EHR PATTERNS & COMMON WORKFLOWS section — 5 standard workflows (admission, medication order, discharge, vital signs monitoring, lab result processing) with component specs and key safety checks
+- **workflows/build.md:** CODE QUALITY VALIDATION pre-sign-off gate — mandates Inspector review before build completion, hard stops, QA_REPORT.md handoff
+- **workflows/verify.md:** ACCESSIBILITY AUDIT final gate — WCAG 2.1 AA checklist, auto-fail criteria, escalation path
+
+---
+
+### v3.3.0 — The Token Economy
+
+_Released May 6, 2026_
+
+**Objective:** Formalize Superpowers and Serena Protocols to minimize context overhead, reduce operational costs, and enforce architectural discipline.
+
+**Key Features:**
+
+- **Token Economy:** Implemented `caveman-lite` and `caveman-review` artifact compression protocols to drastically reduce token consumption.
+- **Model Routing:** Introduced cost-optimized model routing in `AUTONOMY.md` to offload routine execution to GLM models.
+- **Superpowers Integration:** Embedded Requirement Refinement, Batch Execution, RGR TDD, and 4-Phase Debugging into core agent templates.
+- **Serena Protocols:** Enforced Symbol-level Retrieval and Query-Before-Coding patterns for the `@Scout`, `@Builder`, and `@Strategist` agents.
+
+---
 
 ### v3.2.0 — The Pipeline Architect
 
@@ -537,4 +578,4 @@ Single-project, manually-driven execution. Hard stop after every workflow step.
 
 ---
 
-**Status:** SYSTEM ONLINE | **Version:** 3.2.0 (Stable)
+**Status:** SYSTEM ONLINE | **Version:** 3.4.0 (Stable)

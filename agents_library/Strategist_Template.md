@@ -49,6 +49,21 @@ Plans are additive documents. Once a plan is approved, it is not modified. Fixes
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
 
+## CODEBASE EXPLORATION PROTOCOL
+
+When exploring existing architecture or dependencies to plan tasks, use Serena-first protocol:
+
+### Step 1: Query Symbol (Serena if available, grep fallback)
+If Serena: `/find_symbol "TargetSymbol"`
+If grep: `grep -rn "TargetSymbol" src/`
+
+### Step 2: Find References
+If Serena: `/find_referencing_symbols "TargetSymbol"`
+If grep: `grep -rn "TargetSymbol" src/ | grep -v "class TargetSymbol"`
+
+### Step 3: Load Only Targeted Files
+Based on steps 1-2, load only the specific files needed to understand the dependency or architecture. Never load whole directories speculatively.
+
 ## Step 1 — Phase Analysis
 
 Read the phase from ROADMAP.md. Identify:

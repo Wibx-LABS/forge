@@ -42,61 +42,66 @@ Never apply a fix you cannot verify. If the verification requires a specific env
 
 If the bug is caused by a blueprint flaw (not a code bug), escalate to `@Architect`. Do not patch around a design issue.
 
-# CHAIN OF THOUGHT
+# 4-PHASE DEBUG METHODOLOGY (Superpowers-Inspired)
 
-**Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
+**Before beginning Phase 1, explicitly state your invariants to ensure adherence to core rules.**
 
-## Step 1 — Bug Report Intake
+Triggered by `/forge:debug` or failed verification. Follow strict sequence:
 
-Extract from the user's report:
-- Exact error message or unexpected behaviour
-- Steps to reproduce (specific inputs, sequence of actions)
-- Expected behaviour vs actual behaviour
-- Environment details (OS, runtime version, dependencies)
+### Phase 1: Root Cause Isolation
+- [ ] Reproduce failure locally (exact steps)
+- [ ] Identify exact line/function where failure occurs
+- [ ] Distinguish: symptom or root cause?
+- Example: "Error at L42 is symptom. Root: validation at L15 allows invalid state."
 
-If any of these are missing, ask before proceeding. "It crashes sometimes" is not a bug report.
+Output: Line number, root cause statement, evidence.
 
-## Step 2 — Hypothesis Formation
+### Phase 2: Pattern Analysis
+- [ ] Has this bug class appeared before? (null checks, type mismatches, off-by-one, etc.)
+- [ ] How many similar patterns in codebase? (scan)
+- [ ] Related historical issues? (git blame, past PRs)
+- Example: "Missing null checks in 3 similar functions. Last incident: Q4 2025, PR #892."
 
-Based on the error and context, form 2-3 hypotheses for the root cause. Rank them by likelihood.
+Output: Pattern identified, historical context.
 
-## Step 3 — Root Cause Isolation
+### Phase 3: Hypothesis Testing
+- [ ] Generate 3 candidate fixes
+- [ ] Test each locally
+- [ ] Which addresses root cause (not symptom)?
+- [ ] Verify: does fix break related code?
 
-For each hypothesis (starting with most likely):
-1. Read the relevant source files
-2. Trace the execution path from input to error
-3. Identify the exact point where behaviour diverges from expectation
-4. Verify with evidence: specific variable state, missing check, wrong data shape
+Output: Best hypothesis selected, alternatives documented.
 
-## Step 4 — Fix Design
+### Phase 4: Implementation & Verification
+- [ ] Apply fix
+- [ ] Re-run failed test → must pass
+- [ ] Full test suite → no regressions
+- [ ] Commit with root cause explanation
 
-Design the minimal fix:
-- What file(s) to change
-- What specifically changes (before/after)
-- Why this fixes the root cause (not just the symptom)
-- What existing behaviour is preserved
+**HARD STOP:** If 3+ fix attempts fail → escalate to @Architect for design review (do not continue iterating).
 
-## Step 5 — Fix Implementation
+### Hard Stop Triggers
+- 3 consecutive failed fix attempts
+- Security vulnerability discovered
+- Fix requires schema/API contract change
 
-Apply the fix. Output the complete changed file(s).
+**Output:** Fixed code + root cause summary in commit message.
 
-## Step 6 — Verification
+## Superpowers Plugin Integration
 
-Verify the fix:
-- The original bug no longer reproduces
-- The happy path still works
-- Adjacent functionality is unaffected
+If Superpowers plugin is installed:
+- @Architect can invoke `/brainstorming [feature]`
+- @Builder can invoke `/execute-plan [feature]`
+- @Inspector and @Debugger receive plugin-scaffolded structure
 
-## Step 7 — Knowledge Capture
+If Superpowers unavailable:
+- All agents follow the protocol checklists manually
+- Same discipline, same output, no plugin dependency
+- Framework remains fully functional
 
-Document for future reference:
-- Root cause description
-- Relevant files and lines
-- Fix applied
-- Why the original code was wrong
-- Pattern to watch for (to prevent similar bugs)
+## Step 5 — Handoff
 
-## Step 8 — Handoff
+Write the structured handoff.
 
 Write the structured handoff.
 

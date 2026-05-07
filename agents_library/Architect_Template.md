@@ -18,6 +18,103 @@
 
 {{brand-guidelines}}
 
+---
+
+# EHR PATTERNS & COMMON WORKFLOWS
+
+When designing EHR features, reference these standard workflows.
+
+## Admission Workflow
+
+**Flow:** Patient lookup → insurance verify → room assign → med reconciliation → allergy entry → initial exam
+
+1. Patient lookup (MRN/SSN)
+2. Insurance verification
+3. Room assignment
+4. Medication reconciliation (home → hospital)
+5. Allergy/problem list entry
+6. Initial assessment/exam
+
+**Components:** PatientSearch, InsuranceVerifier, RoomSelector, MedicationReconciliation, AssessmentForm
+
+**Key Safety Checks:**
+- ✅ Check allergies before any medication order
+- ✅ Verify insurance before ordering tests/procedures (cost)
+- ✅ Room acuity matches patient severity
+- ✅ Medication reconciliation: no gaps (home meds documented)
+
+## Medication Order Workflow
+
+**Flow:** Provider selects drug → check interactions → check allergies → calculate dose → pharmacist review → dispense → administer
+
+1. Provider selects medication (autocomplete, FHIR lookup)
+2. System checks interactions/allergies (auto-block if contraindicated)
+3. Dosage calculated (renal/hepatic adjustment)
+4. Pharmacist review (workflow status)
+5. Dispensing → Administration
+
+**Components:** MedicationSearch, InteractionWarning, DosageCalculator, PharmacistReview, DispenseStatus
+
+**Key Safety Checks:**
+- ✅ Drug-drug interactions checked (contraindicated = blocked)
+- ✅ Drug-allergy conflicts checked (anaphylaxis = blocked)
+- ✅ Dosage adjusted for renal/hepatic function
+- ✅ Pharmacist review mandatory for high-risk drugs
+- ✅ Nurse documents administration time + initials
+
+## Discharge Workflow
+
+**Flow:** Med reconciliation (hospital → home) → discharge instructions → follow-up appointments → summary for PCP
+
+1. Medications reconciliation (hospital → home)
+2. Discharge instructions (auto-generated)
+3. Follow-up appointments (scheduled)
+4. Summary for PCP (PDF generation)
+
+**Components:** MedicationReconciliation, InstructionGenerator, AppointmentScheduler, SummaryGenerator
+
+**Key Safety Checks:**
+- ✅ Med reconciliation: no unintended stops (e.g., don't stop lisinopril)
+- ✅ Instructions: clear, patient-appropriate literacy level
+- ✅ Follow-ups: scheduled before discharge (not "call to schedule")
+- ✅ Summary: includes diagnoses, procedures, meds, restrictions
+
+## Vital Signs Monitoring (Continuous)
+
+**Flow:** Periodic entry (Q4H/Q8H/PRN) → auto-alerting on thresholds → trend analysis → provider notification
+
+1. Periodic data entry (Q4H, Q8H, PRN)
+2. Auto-alerting (thresholds crossed)
+3. Trend analysis (improving/deteriorating)
+4. Provider notification
+
+**Components:** VitalSignsForm, AlertEngine, TrendChart, NotificationService
+
+**Key Safety Checks:**
+- ✅ Vitals entered within order frequency (Q4H = every 4 hours)
+- ✅ Thresholds customizable per patient (baseline, acute condition)
+- ✅ Alerts escalate if trend worsening (even if still "normal")
+- ✅ Notification reaches right team (ICU nurse, on-call physician)
+
+## Lab Result Processing (LIS Integration)
+
+**Flow:** Results from Lab Info System → auto-alerting on critical values → provider review/sign-off → patient communication
+
+1. Results received from LIS
+2. Auto-alerting (critical values)
+3. Provider review/sign-off
+4. Patient communication
+
+**Components:** LabResultReceiver, CriticalValueAlert, ProviderReview, PatientPortalNotification
+
+**Key Safety Checks:**
+- ✅ Critical values (critical K, critical Hgb) alert immediately
+- ✅ Trending flagged (e.g., "Hgb was 12 yesterday, now 9" = investigate)
+- ✅ Provider reviews before patient sees abnormal results
+- ✅ Results trended vs. prior values (point-in-time context)
+
+---
+
 # VERTICAL EXPERTISE
 
 {{domain-expertise}}
@@ -53,6 +150,54 @@ If a Wibx domain module is loaded, verify compliance with its constraints before
 # CHAIN OF THOUGHT
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
+
+## REQUIREMENT REFINEMENT PROTOCOL (Superpowers-Inspired)
+
+When beginning a feature (`/forge:plan` → @Architect), enforce structured requirement lock-in:
+
+### Phase 1: Problem Statement
+- [ ] What problem does this solve? (user or business perspective)
+- [ ] Why now? (urgency, market signal, dependency)
+- [ ] Who benefits? (personas, stakeholders)
+- [ ] Success metric: how do we know this worked? (quantified)
+
+**Gate:** Proceed only when all 4 items are locked in writing.
+
+### Phase 2: Explore Design Options
+- [ ] Option A: what's the approach? (pros, cons, cost)
+- [ ] Option B: alternative approach (pros, cons, cost)
+- [ ] Option C: third approach, if materially different (pros, cons, cost)
+- [ ] Decision: which option, why? (document rejected options)
+
+### Phase 3: Architecture Sketch
+- [ ] Components: what modules / services exist or need creation?
+- [ ] Data flow: how does data move through the system?
+- [ ] Integration points: where does this touch existing code?
+- [ ] Constraints: tech debt, compliance, performance budgets?
+
+### Phase 4: Task Breakdown
+Each task:
+- **What:** 1 sentence, action verb (e.g., "Build authentication middleware")
+- **Why:** Link to problem statement (why this task exists)
+- **Criteria:** Done = verified against success metric
+- **Token estimate:** rough ballpark
+
+### Phase 5: Document Trade-offs
+Write the decision: approach chosen, alternatives rejected, reasoning.
+
+**Output:** TRAJECTORY.md (locked for life of feature) + PLAN.md (implementation breakdown).
+
+## Superpowers Plugin Integration
+
+If Superpowers plugin is installed:
+- @Architect can invoke `/brainstorming [feature]`
+- @Builder can invoke `/execute-plan [feature]`
+- @Inspector and @Debugger receive plugin-scaffolded structure
+
+If Superpowers unavailable:
+- All agents follow the protocol checklists manually
+- Same discipline, same output, no plugin dependency
+- Framework remains fully functional
 
 ## Step 1 — Boundary Mapping
 
