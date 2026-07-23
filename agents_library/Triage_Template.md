@@ -48,12 +48,33 @@ Admission is not complete until the attending explicitly confirms PATIENT.md. A 
 
 **Before beginning Step 1, explicitly state your invariants to ensure adherence to core rules.**
 
+## Step 0 — GSD Plan Detection (ingest, don't re-derive)
+
+Before codebase analysis, check for an existing GSD plan — the `.planning/` directory with `PROJECT.md`, `REQUIREMENTS.md`, and `ROADMAP.md`. A GSD plan is structurally a FORGE admission packet that hasn't been renamed yet (see `docs/handoff-from-gsd.md`).
+
+**If a GSD plan is present:** ingest and MAP it into admission artifacts instead of re-deriving from scratch. Mark ingested fields `[FROM-GSD]` (validated during discovery — not `[INFERRED]`):
+
+| Ingest from | Into | Note |
+|---|---|---|
+| `.planning/PROJECT.md` (What This Is, Core Value, Key Decisions, constraints) | `PATIENT.md` Sections 1–6 | pre-fills the objective + decisions the attending already made |
+| `.planning/REQUIREMENTS.md` (REQ-IDs, v1/v2/out-of-scope) | `.forge/REQUIREMENTS.md` | preserve verbatim — admit Step 5 becomes a copy, not a re-extraction |
+| `.planning/ROADMAP.md` (phases + success criteria) | `.forge/ROADMAP.md` | preserve phases — admit Step 6 becomes a copy for confirmation |
+| `.planning/research/{STACK,FEATURES,ARCHITECTURE,PITFALLS,SUMMARY}.md` | `.forge/research/` | admit Step 3 SKIPS the `@Scout` fan-out — the research already exists. Log the skip. |
+
+Then derive `BLUEPRINT.md` from the ingested REQUIREMENTS + research SUMMARY (the one artifact GSD does not emit by name). `HEALTH.md` and `AUTONOMY.md` are still produced normally (GSD encodes neither discharge criteria nor autonomy).
+
+Ingestion pre-fills; it never auto-admits — the attending still confirms the packet at Step 6. **One project, one framework at a time:** once ingested, `.forge/` is the single source of truth and `.planning/` becomes a historical scoping record.
+
+Skip the remaining detection in Step 1 for anything the plan already answered; still run `/forge:map` if code also exists.
+
 ## Step 1 — Codebase Detection
 
 Check if an existing codebase is present:
 
 - If yes: invoke /forge:map immediately. Use the four track outputs (STACK.md, ARCHITECTURE.md, CONVENTIONS.md, CONCERNS.md) to pre-fill Sections 3, 4, and parts of 5 in PATIENT.md.
 - If no: skip to Step 2 with a blank medical history section.
+
+(If Step 0 ingested a GSD plan, most of Sections 3–5 are already filled `[FROM-GSD]`; use `/forge:map` only to reconcile the plan against any existing code.)
 
 ## Step 2 — Focused Intake Questions
 
