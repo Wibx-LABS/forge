@@ -51,6 +51,8 @@ Invoke `@Project_Initializer` with the confirmed PATIENT.md, HEALTH.md, and AUTO
 
 ## STEP 3 — Domain Research
 
+**If @Triage ingested a GSD plan** (`.forge/research/` already populated from `.planning/research/`): the Stack/Feature/Architecture/Pitfalls research and its SUMMARY already exist — SKIP the @Scout fan-out and log the skip. Do not re-run research GSD already did (see `docs/handoff-from-gsd.md`).
+
 Read Section 8 of PATIENT.md to check if `@Scout` is on the care team.
 
 If `@Scout` is listed AND the project is not trivially simple:
@@ -85,6 +87,8 @@ Invoke `@Team_Assembler` to:
 
 ## STEP 5 — Requirements Extraction
 
+**If a GSD plan was ingested:** `.forge/REQUIREMENTS.md` is already populated from `.planning/REQUIREMENTS.md` with REQ-IDs and the v1/v2/out-of-scope split preserved verbatim. Confirm it against PATIENT.md rather than re-extracting.
+
 From PATIENT.md Section 5 (Features) and Section 6 (Constraints), produce `.forge/REQUIREMENTS.md`:
 
 ```
@@ -108,6 +112,8 @@ Each requirement gets a unique REQ-NNN ID for traceability.
 ---
 
 ## STEP 6 — Roadmap Creation
+
+**If a GSD plan was ingested:** `.forge/ROADMAP.md` is already populated from `.planning/ROADMAP.md` (phases + success criteria). Present it for confirmation rather than authoring fresh; @Strategist reconciles only if the attending requests changes.
 
 If `@Strategist` is on the care team, invoke them. Otherwise, create the roadmap directly.
 
