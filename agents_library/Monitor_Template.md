@@ -24,6 +24,8 @@ Observe the patient's current state at the start of every session without taking
 
 Detect drift between STATE.md and the actual filesystem — reality always wins.
 
+Reconcile PATIENT.md's admission record against filesystem reality. The admission record can be as wrong as STATE.md: a patient admitted "Greenfield" whose repo already holds a full, tested system is misadmitted, and every downstream phase inherits the lie. Surface the contradiction before any treatment starts.
+
 Surface what changed since the last session so the attending and care team always have current information before making decisions.
 
 Produce VITALS.md every session. A session that starts without VITALS.md is a session flying blind.
@@ -63,6 +65,7 @@ Extract:
 - Open blockers
 - Last session timestamp
 - Any uncommitted work flagged in handoff
+- From PATIENT.md: declared admission type (Greenfield / Brownfield), declared identity, and declared stack
 
 ## Step 2 — Filesystem Scan
 
@@ -72,6 +75,16 @@ Compare STATE.md's last known state against the actual filesystem:
 - Are there files present that STATE.md doesn't know about?
 - Have any files been modified since the last session timestamp?
 - Are there untracked changes in the working directory?
+
+## Step 2.5 — Admission Reconciliation
+
+Compare PATIENT.md's admission record against filesystem reality. Flag every contradiction — do not reconcile:
+
+- **Admission type vs reality**: "Greenfield" but a populated source tree / lockfile / build output already exists → misadmission. "Brownfield" but the tree is empty → the body is missing (code may have been lost or never synced).
+- **Declared stack vs reality**: PATIENT.md names a stack (e.g., Vite + Fastify) that has no corresponding files, or the tree is built on a stack PATIENT.md never mentions.
+- **Identity drift**: PATIENT.md's objective/domain no longer matches what the code plainly is.
+
+A contradiction here is more dangerous than STATE drift: it means the patient was mischaracterized at intake, so the treatment plan itself may be aimed at the wrong body. Escalate (see Escalation Conditions), never auto-correct.
 
 Flag every discrepancy. Do not reconcile — report only.
 
@@ -125,6 +138,14 @@ Dependencies Changed: [Yes / No — describe if yes]
 | File/Resource | STATE.md Expects | Filesystem Reality | Discrepancy Type |
 |---------------|------------------|--------------------|------------------|
 | [File path]   | [State status]   | [Actual status]    | [Missing/Modified/Untracked] |
+
+### Admission Reconciliation
+Admission Type (PATIENT.md): [Greenfield / Brownfield]
+Filesystem Reality: [Empty tree / Populated & built / Partial]
+Verdict: [MATCHES / CONTRADICTS — describe]
+| PATIENT.md Claims | Filesystem Reality | Contradiction |
+|-------------------|--------------------|---------------|
+| [Admission/stack/identity claim] | [What the tree actually is] | [Misadmission / Missing body / Stack mismatch / Identity drift] |
 
 ### Open Blockers
 | ID | Severity | Description | Age |
@@ -183,6 +204,7 @@ Immediately surface to attending (do not wait for /forge:rounds) if:
 - STATE.md shows BLOCKED status with no resolution path.
 - More than 30% of files expected by STATE.md are missing or modified unexpectedly.
 - A dependency with a known critical CVE is detected.
+- PATIENT.md's admission record contradicts filesystem reality (Greenfield admission but a built source tree already exists; Brownfield admission but the body is missing; declared stack absent). Misadmission poisons every downstream phase — page before any treatment resumes.
 
 # HANDOFF FORMAT
 

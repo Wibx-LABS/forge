@@ -42,6 +42,12 @@
 - [ ] [e.g., "All modules have defined boundaries per BLUEPRINT.md"]
 - [ ] [e.g., "No circular dependencies"]
 
+### Durability & Recovery
+> Mandatory for any code patient. A patient whose only copy is local is one disk failure from non-existence.
+- [ ] [e.g., "Source is under version control with a configured git remote — not a local-only repo"]
+- [ ] [e.g., "A push to the remote was verified this treatment, not assumed"]
+- [ ] [e.g., "No artifact lives only in an ephemeral location (Trash, /tmp, uncommitted working tree, unsynced cloud folder)"]
+
 ### Domain-Specific (n8n / NEXUS)
 > Remove this section if not applicable.
 - [ ] [e.g., "All n8n workflows import without errors"]
@@ -73,6 +79,7 @@
 | Criterion Group | Status | Last Checked | Notes |
 |:----------------|:-------|:-------------|:------|
 | Code Quality | ⬜ PENDING | — | — |
+| Durability & Recovery | ⬜ PENDING | — | — |
 | Test Coverage | ⬜ PENDING | — | — |
 | Security | ⬜ PENDING | — | — |
 | Architecture | ⬜ PENDING | — | — |

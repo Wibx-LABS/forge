@@ -8,6 +8,12 @@ This library provides pre-written, proven criteria for `@Triage` to use when con
 - [ ] Code compiles/builds successfully with zero errors
 - [ ] No hardcoded secrets or sensitive credentials in the source code
 
+## Durability & Recovery
+> A patient whose only copy is local is one disk failure from non-existence. No code patient discharges without a durable home.
+- [ ] Source is under version control with a configured git remote (not a local-only repo)
+- [ ] A push/backup to that remote has been verified during the treatment, not merely assumed
+- [ ] No project artifact exists only in a single ephemeral location (Trash, `/tmp`, an uncommitted working tree, an unsynced cloud folder)
+
 ## Backend / API Development
 - [ ] All API endpoints return expected standard HTTP status codes (200, 400, 401, 404, 500)
 - [ ] Database schema changes are documented and migrated cleanly
